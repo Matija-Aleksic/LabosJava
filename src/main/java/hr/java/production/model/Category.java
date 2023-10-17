@@ -12,7 +12,6 @@ public class Category {
         this.name = name;
         this.description = description;
     }
-    //test
 
     public String getName() {
         return name;
@@ -21,6 +20,7 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getDescription() {
         return description;
