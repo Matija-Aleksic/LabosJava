@@ -3,6 +3,9 @@ package hr.java.production.main;
 import hr.java.production.model.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -118,6 +121,7 @@ public class Main {
             }
         }
         System.out.println("Factory with largest volume item: " + largestVolumeFactory.getName());
+        //test
 
         Store cheapestStore = stores[0];
         Item cheapestItem = stores[0].getItems()[0];
@@ -132,5 +136,55 @@ public class Main {
         System.out.println("Store with the cheapest item: " + cheapestStore.getName());
         System.out.println("Cheapest item: " + cheapestItem.getName());
 
+        int counter ;
+        Map<String, Integer> brojiloStore = new HashMap<>();
+        for (Store store : stores) {
+            String city = store.getAddress().getCity();
+            if (brojiloStore.containsKey(city)) {
+                brojiloStore.put(city, brojiloStore.get(city) + 1);
+            } else {
+                brojiloStore.put(city, 1);
+            }
+        }
+
+        Integer max =0;
+        String imeSnajvise = null;
+        for (Map.Entry<String,Integer> entry : brojiloStore.entrySet()) {
+            if (entry.getValue()>max){
+                max=entry.getValue();
+                imeSnajvise=entry.getKey();
+        }
+        }
+        System.out.println("najvise trgovina"+ imeSnajvise );
+        Map<String, Integer> brojiloTvornice = new HashMap<>();
+        for (Factory factory : factories) {
+            String fac = factory.getAddress().getCity();
+            if (brojiloStore.containsKey(fac)) {
+                brojiloStore.put(fac, brojiloStore.get(fac) + 1);
+            } else {
+                brojiloStore.put(fac, 1);
+            }
+        }
+        Integer maxo =0;
+        String imeSnajviseTvornica = null;
+        for (Map.Entry<String,Integer> entry : brojiloStore.entrySet()) {
+            if (entry.getValue() > max) {
+                maxo = entry.getValue();
+                imeSnajviseTvornica = entry.getKey();
+            }
+        }
+        String omjer= null;
+        ArrayList<String> gradovi = new ArrayList<>();
+        for (String key : brojiloTvornice.keySet()){
+            gradovi.add(key);
+        }
+        Float omj = (float) (brojiloStore.get(gradovi.get(0))/ brojiloTvornice.get(gradovi.get(0)));
+        for (int i =0;i<brojiloTvornice.size();i++) {
+          if (brojiloStore.get(gradovi.get(i))/ brojiloTvornice.get(gradovi.get(i)) > omj){
+              omj = (float) (brojiloStore.get(gradovi.get(i))/ brojiloTvornice.get(gradovi.get(i)));
+          }
+        }
+
+        
     }
 }
