@@ -26,7 +26,7 @@ public class Milk extends Item implements Edible{
     }
 
     @Override
-    public double calculatePrice(double weight) {
+    public BigDecimal calculatePrice(double weight) {
         return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
     }
 }

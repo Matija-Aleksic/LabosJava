@@ -72,13 +72,13 @@ public class Main {
         Item foodWithMaxKilocalories = null;
         double maxKilocalories = 0;
         Item foodWithMaxTotalPrice = null;
-        double maxTotalPrice = 0;
+        BigDecimal maxTotalPrice = new BigDecimal(0);
         for (Item item : items) {
             if (item instanceof Edible) {
 
                 Edible edibleItem = (Edible) item;
                 int kilocalories = edibleItem.calculateKilocalories();
-                double totalPrice = 0;
+                BigDecimal totalPrice = BigDecimal.valueOf(0);
 
                 if (item instanceof Bread) {
                     Bread bread = (Bread) item;
@@ -93,7 +93,7 @@ public class Main {
                     foodWithMaxKilocalories = item;
                 }
 
-                if (totalPrice > maxTotalPrice) {
+                if (totalPrice.compareTo(maxTotalPrice) > 0) {
                     maxTotalPrice = totalPrice;
                     foodWithMaxTotalPrice = item;
                 }
