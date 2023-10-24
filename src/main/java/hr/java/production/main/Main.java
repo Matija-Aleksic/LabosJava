@@ -289,7 +289,12 @@ public class Main {
             System.out.println("Poštanski broj:");
             String postalCode = scanner.nextLine();
 
-            Address factoryAddress = new Address(street, houseNumber, city, postalCode);
+            Address factoryAddress = new Address.Builder()
+                    .setStreet(street)
+                    .setHouseNumber(houseNumber)
+                    .setCity(city)
+                    .setPostalCode(postalCode)
+                    .build();
 
             factories[i] = new Factory(factoryName, factoryAddress, items);
         }
