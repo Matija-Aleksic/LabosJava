@@ -1,22 +1,22 @@
 package hr.java.production.model;
 
-public class Factory {
-    private String name;
+public class Factory extends NamedEntity{
+
     private Address address;
     private Item[] items;
 
     public Factory(String name, Address address, Item[] items) {
-        this.name = name;
+        super(name);
         this.address = address;
         this.items = items;
     }
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     public Address getAddress() {
