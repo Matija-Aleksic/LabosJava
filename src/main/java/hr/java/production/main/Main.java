@@ -98,34 +98,89 @@ public class Main {
 
     private static Item[] getItems(Scanner scanner, Category[] categories) {
         Item[] items = new Item[5];
+
         for (int i = 0; i < 5; i++) {
             System.out.println("Unesite podatke za artikal " + (i + 1) + ":");
-            System.out.println("Naziv:");
-            String itemName = scanner.nextLine();
+            System.out.println("Dali je artikal Hrana/jestiv? (y/n)");
 
-            System.out.println("Kategorija (unesite broj od 1 do 3):");
-            int categoryIndex = Integer.parseInt(scanner.nextLine()) - 1;
-            Category itemCategory = categories[categoryIndex];
+            String choice = scanner.nextLine();
+            if (choice.equals("y")) {
+                System.out.println("Trenutno postoji Bread i Milk");
+                choice = scanner.nextLine();
 
-            System.out.println("Širina:");
-            BigDecimal width = new BigDecimal(scanner.nextLine());
+                if (choice.equals("bread") || choice.equals("milk")) {
+                    int weight;
+                    int j = 0;
+                    int n = 0;
 
-            System.out.println("Visina:");
-            BigDecimal height = new BigDecimal(scanner.nextLine());
+                    System.out.println("Naziv:");
+                    String itemName = scanner.nextLine();
 
-            System.out.println("Dužina:");
-            BigDecimal length = new BigDecimal(scanner.nextLine());
+                    Category itemCategory = categories[0];
 
-            System.out.println("Trošak proizvodnje:");
-            BigDecimal productionCost = new BigDecimal(scanner.nextLine());
+                    System.out.println("Širina:");
+                    BigDecimal width = new BigDecimal(scanner.nextLine());
 
-            System.out.println("Prodajna cijena:");
-            BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
+                    System.out.println("Visina:");
+                    BigDecimal height = new BigDecimal(scanner.nextLine());
 
-            items[i] = new Item(itemName, itemCategory, width, height, length, productionCost, sellingPrice);
+                    System.out.println("Dužina:");
+                    BigDecimal length = new BigDecimal(scanner.nextLine());
+
+                    System.out.println("Težina:");
+                    weight = Integer.parseInt(scanner.nextLine());
+
+                    System.out.println("Trošak proizvodnje:");
+                    BigDecimal productionCost = new BigDecimal(scanner.nextLine());
+
+                    System.out.println("Prodajna cijena:");
+                    BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
+
+                    if (choice.equals("bread")) {
+                        Bread[] breads = new Bread[1];
+                        breads[j] = new Bread(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                        items [i] = breads[j];
+                        breads[j].calculateKilocalories();
+                        j++;
+
+                    } else if (choice.equals("milk")) {
+                        Milk[] milks = new Milk[1];
+                        milks[n] = new Milk(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                        items[i] = milks[n];
+                        milks[n].calculateKilocalories();
+                        n++;
+                    }
+                }
+            } else {
+                System.out.println("Naziv:");
+                String itemName = scanner.nextLine();
+
+                System.out.println("Kategorija (unesite broj 2 ili 3):");
+                int categoryIndex = Integer.parseInt(scanner.nextLine()) - 1;
+                Category itemCategory = categories[categoryIndex];
+
+                System.out.println("Širina:");
+                BigDecimal width = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Visina:");
+                BigDecimal height = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Dužina:");
+                BigDecimal length = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Trošak proizvodnje:");
+                BigDecimal productionCost = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Prodajna cijena:");
+                BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
+
+                items[i] = new Item(itemName, itemCategory, width, height, length, productionCost, sellingPrice);
+            }
         }
+
         return items;
     }
+
 
     private static Factory[] getFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[2];
@@ -153,4 +208,5 @@ public class Main {
         }
         return factories;
     }
+
 }
