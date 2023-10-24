@@ -19,6 +19,7 @@ public class Bread extends Item implements Edible {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+    
 
     @Override
     public int calculateKilocalories() {

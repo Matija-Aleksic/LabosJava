@@ -1,6 +1,6 @@
 package hr.java.production.model;
 
-public abstract class NamedEntity {
+public class NamedEntity {
     private String name;
 
     public NamedEntity(String name) {

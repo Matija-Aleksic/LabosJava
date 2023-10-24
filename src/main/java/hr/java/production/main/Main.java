@@ -141,7 +141,11 @@ public class Main {
             System.out.println("Web adresa:");
             String webAddress = scanner.nextLine();
 
-            stores[i] = new Store(storeName, webAddress, items);
+            stores[i] = new Builder()
+                    .setName(storeName)
+                    .setWebAddress(webAddress)
+                    .setItems(items)
+                    .createStore();
         }
         return stores;
     }
@@ -151,7 +155,9 @@ public class Main {
         for (int i = 0; i < 3; i++) {
             System.out.println("Unesite naziv kategorije " + (i + 1) + ":");
             String categoryName = scanner.nextLine();
-            categories[i] = new Category(categoryName);
+            categories[i] = new CategoryBuilder()
+                    .setName(categoryName)
+                    .createCategory();
         }
         return categories;
     }
@@ -198,21 +204,38 @@ public class Main {
 
                     if (choice.equals("bread")) {
                         Bread[] breads = new Bread[1];
-                        breads[j] = new Bread(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                        breads[j] = new BreadBuilder()
+                                .setName(itemName)
+                                .setCategory(itemCategory)
+                                .setWidth(width)
+                                .setHeight(height)
+                                .setLength(length)
+                                .setProductionCost(productionCost)
+                                .setSellingPrice(sellingPrice)
+                                .setWeight(weight)
+                                .createBread();
                         items[i] = breads[j];
                         breads[j].calculateKilocalories();
                         j++;
 
                     } else if (choice.equals("milk")) {
                         Milk[] milks = new Milk[1];
-                        milks[n] = new Milk(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                        milks[n] = new Builder()
+                                .setName(itemName)
+                                .setCategory(itemCategory)
+                                .setWidth(width)
+                                .setHeight(height)
+                                .setLength(length)
+                                .setProductionCost(productionCost)
+                                .setSellingPrice(sellingPrice)
+                                .setWeight(weight)
+                                .createMilk();
                         items[i] = milks[n];
                         milks[n].calculateKilocalories();
                         n++;
                     }
                 }
-            }
-            else if (choice.equals("laptop")) {
+            } else if (choice.equals("laptop")) {
                 System.out.println("Naziv:");
                 String itemName = scanner.nextLine();
 
@@ -234,34 +257,64 @@ public class Main {
                 System.out.println("Trajanje garantnog roka (u mjesecima):");
                 int warrantyDuration = Integer.parseInt(scanner.nextLine());
 
-                Laptop laptop = new Laptop(itemName, categories[0], width, height, length, productionCost, sellingPrice, warrantyDuration);
+                Laptop laptop = new Builder()
+                        .setName(itemName)
+                        .setCategory(categories[0])
+                        .setWidth(width)
+                        .setHeight(height)
+                        .setLength(length)
+                        .setProductionCost(productionCost)
+                        .setSellingPrice(sellingPrice)
+                        .setWarrantyDurationInMonths(warrantyDuration)
+                        .createLaptop();
                 items[i] = laptop;
-            }
+            } else {
+                String itemName = null;
+                BigDecimal width = null;
+                BigDecimal height = null;
+                BigDecimal length = null;
+                BigDecimal productionCost = null;
+                BigDecimal sellingPrice = null;
 
-            else {
                 System.out.println("Naziv:");
-                String itemName = scanner.nextLine();
+                itemName = scanner.nextLine();
 
                 System.out.println("Kategorija (unesite broj 2 ili 3):");
                 int categoryIndex = Integer.parseInt(scanner.nextLine()) - 1;
                 Category itemCategory = categories[categoryIndex];
 
                 System.out.println("Širina:");
-                BigDecimal width = new BigDecimal(scanner.nextLine());
+                width = new BigDecimal(scanner.nextLine());
 
                 System.out.println("Visina:");
-                BigDecimal height = new BigDecimal(scanner.nextLine());
+                height = new BigDecimal(scanner.nextLine());
 
                 System.out.println("Dužina:");
-                BigDecimal length = new BigDecimal(scanner.nextLine());
+                length = new BigDecimal(scanner.nextLine());
 
                 System.out.println("Trošak proizvodnje:");
-                BigDecimal productionCost = new BigDecimal(scanner.nextLine());
+                productionCost = new BigDecimal(scanner.nextLine());
 
                 System.out.println("Prodajna cijena:");
-                BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
+                sellingPrice = new BigDecimal(scanner.nextLine());
 
-                items[i] = new Item(itemName, itemCategory, width, height, length, productionCost, sellingPrice);
+                if (itemName == null || width == null || height == null || length == null || productionCost == null || sellingPrice == null) {
+                    System.out.println("Krivi unos");
+                    return null;
+
+                } else {
+
+
+                    items[i] = new Builder()
+                            .setName(itemName)
+                            .setCategory(itemCategory)
+                            .setWidth(width)
+                            .setHeight(height)
+                            .setLength(length)
+                            .setProductionCost(productionCost)
+                            .setSellingPrice(sellingPrice)
+                            .createItem();
+                }
             }
         }
 
@@ -271,33 +324,50 @@ public class Main {
 
     private static Factory[] getFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[2];
+        String factoryName = null;
+        String street = null;
+        String houseNumber = null;
+        String city = null;
+        String postalCode = null;
+
         for (int i = 0; i < 2; i++) {
             System.out.println("Unesite podatke za tvornicu " + (i + 1) + ":");
             System.out.println("Naziv:");
-            String factoryName = scanner.nextLine();
+            factoryName = scanner.nextLine();
 
 
             System.out.println("Ulica:");
-            String street = scanner.nextLine();
+            street = scanner.nextLine();
 
             System.out.println("Broj kuće:");
-            String houseNumber = scanner.nextLine();
+            houseNumber = scanner.nextLine();
 
             System.out.println("Grad:");
-            String city = scanner.nextLine();
+            city = scanner.nextLine();
 
             System.out.println("Poštanski broj:");
-            String postalCode = scanner.nextLine();
+            postalCode = scanner.nextLine();
 
-            Address factoryAddress = new Address.Builder()
-                    .setStreet(street)
-                    .setHouseNumber(houseNumber)
-                    .setCity(city)
-                    .setPostalCode(postalCode)
-                    .build();
+            if (factoryName == null || street == null || houseNumber == null || city == null || postalCode == null) {
+                System.out.println("krivi unos");
+                return null;
+            } else {
 
-            factories[i] = new Factory(factoryName, factoryAddress, items);
+                Address factoryAddress = new Address.Builder()
+                        .setStreet(street)
+                        .setHouseNumber(houseNumber)
+                        .setCity(city)
+                        .setPostalCode(postalCode)
+                        .build();
+
+                factories[i] = new Builder()
+                        .setName(factoryName)
+                        .setAddress(factoryAddress)
+                        .setItems(items)
+                        .createFactory();
+            }
         }
+
         return factories;
     }
 
