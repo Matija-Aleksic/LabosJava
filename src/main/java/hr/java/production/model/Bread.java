@@ -12,13 +12,21 @@ public class Bread extends Item implements Edible {
         this.weight = weight;
     }
 
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     @Override
     public int calculateKilocalories() {
         return caloriesPerKilogram*weight;
     }
 
     @Override
-    public BigDecimal calculatePrice(double weight) {
+    public double calculatePrice(double weight) {
         return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
     }
 }

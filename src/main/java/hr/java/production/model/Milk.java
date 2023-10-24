@@ -12,13 +12,21 @@ public class Milk extends Item implements Edible{
         this.weight = weight;
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
     @Override
     public int calculateKilocalories() {
         return caloriesPerKilogram*weight;
     }
 
     @Override
-    public BigDecimal calculatePrice(double weight) {
+    public double calculatePrice(double weight) {
         return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
     }
 }

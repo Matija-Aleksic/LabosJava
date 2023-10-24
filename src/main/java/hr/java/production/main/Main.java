@@ -69,6 +69,49 @@ public class Main {
         System.out.println("Store with the cheapest item: " + cheapestStore.getName());
         System.out.println("Cheapest item: " + cheapestItem.getName());
 
+        Item foodWithMaxKilocalories = null;
+        double maxKilocalories = 0;
+        Item foodWithMaxTotalPrice = null;
+        double maxTotalPrice = 0;
+        for (Item item : items) {
+            if (item instanceof Edible) {
+
+                Edible edibleItem = (Edible) item;
+                int kilocalories = edibleItem.calculateKilocalories();
+                double totalPrice = 0;
+
+                if (item instanceof Bread) {
+                    Bread bread = (Bread) item;
+                    totalPrice = edibleItem.calculatePrice(bread.getWeight());
+                } else if (item instanceof Milk) {
+                    Milk milk = (Milk) item;
+                    totalPrice = edibleItem.calculatePrice(milk.getWeight());
+                }
+
+                if (kilocalories > maxKilocalories) {
+                    maxKilocalories = kilocalories;
+                    foodWithMaxKilocalories = item;
+                }
+
+                if (totalPrice > maxTotalPrice) {
+                    maxTotalPrice = totalPrice;
+                    foodWithMaxTotalPrice = item;
+                }
+            }
+        }
+
+        if (foodWithMaxKilocalories != null) {
+            System.out.println("Namirnica s najvećim brojem kilokalorija:");
+            System.out.println("Naziv: " + foodWithMaxKilocalories.getName());
+            System.out.println("Broj kilokalorija: " + maxKilocalories);
+        }
+
+        if (foodWithMaxTotalPrice != null) {
+            System.out.println("Namirnica s najvećom ukupnom cijenom s obzirom na težinu:");
+            System.out.println("Naziv: " + foodWithMaxTotalPrice.getName());
+            System.out.println("Ukupna cijena: " + maxTotalPrice);
+        }
+
     }
 
     private static Store[] getStores(Scanner scanner, Item[] items) {
@@ -139,7 +182,7 @@ public class Main {
                     if (choice.equals("bread")) {
                         Bread[] breads = new Bread[1];
                         breads[j] = new Bread(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
-                        items [i] = breads[j];
+                        items[i] = breads[j];
                         breads[j].calculateKilocalories();
                         j++;
 
@@ -208,5 +251,6 @@ public class Main {
         }
         return factories;
     }
+
 
 }
