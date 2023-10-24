@@ -73,6 +73,9 @@ public class Main {
         double maxKilocalories = 0;
         Item foodWithMaxTotalPrice = null;
         BigDecimal maxTotalPrice = new BigDecimal(0);
+        Laptop laptopWithShortestWarranty = null;
+        int shortestWarrantyDuration = Integer.MAX_VALUE;
+
         for (Item item : items) {
             if (item instanceof Edible) {
 
@@ -98,6 +101,14 @@ public class Main {
                     foodWithMaxTotalPrice = item;
                 }
             }
+            if (item instanceof Laptop) {
+                Laptop laptop = (Laptop) item;
+                int warrantyDuration = laptop.getWarrantyDurationInMonths();
+                if (warrantyDuration < shortestWarrantyDuration) {
+                    shortestWarrantyDuration = warrantyDuration;
+                    laptopWithShortestWarranty = laptop;
+                }
+            }
         }
 
         if (foodWithMaxKilocalories != null) {
@@ -110,6 +121,12 @@ public class Main {
             System.out.println("Namirnica s najvećom ukupnom cijenom s obzirom na težinu:");
             System.out.println("Naziv: " + foodWithMaxTotalPrice.getName());
             System.out.println("Ukupna cijena: " + maxTotalPrice);
+        }
+
+        if (laptopWithShortestWarranty != null) {
+            System.out.println("Laptop s najkraćim garantnim rokom:");
+            System.out.println("Naziv: " + laptopWithShortestWarranty.getName());
+            System.out.println("Trajanje garantnog roka (u mjesecima): " + shortestWarrantyDuration);
         }
 
     }
@@ -144,7 +161,7 @@ public class Main {
 
         for (int i = 0; i < 5; i++) {
             System.out.println("Unesite podatke za artikal " + (i + 1) + ":");
-            System.out.println("Dali je artikal Hrana/jestiv? (y/n)");
+            System.out.println("Dali je artikal Hrana/jestiv? (y/n) ili laptop");
 
             String choice = scanner.nextLine();
             if (choice.equals("y")) {
@@ -194,7 +211,34 @@ public class Main {
                         n++;
                     }
                 }
-            } else {
+            }
+            else if (choice.equals("laptop")) {
+                System.out.println("Naziv:");
+                String itemName = scanner.nextLine();
+
+                System.out.println("Širina:");
+                BigDecimal width = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Visina:");
+                BigDecimal height = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Dužina:");
+                BigDecimal length = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Trošak proizvodnje:");
+                BigDecimal productionCost = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Prodajna cijena:");
+                BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
+
+                System.out.println("Trajanje garantnog roka (u mjesecima):");
+                int warrantyDuration = Integer.parseInt(scanner.nextLine());
+
+                Laptop laptop = new Laptop(itemName, categories[0], width, height, length, productionCost, sellingPrice, warrantyDuration);
+                items[i] = laptop;
+            }
+
+            else {
                 System.out.println("Naziv:");
                 String itemName = scanner.nextLine();
 
