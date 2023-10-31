@@ -2,6 +2,8 @@ package hr.java.production.main;
 
 import hr.java.production.exception.DuplicateItemException;
 import hr.java.production.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.nio.channels.ScatteringByteChannel;
@@ -10,23 +12,31 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+
+/**
+ * The type Main.
+ */
 public class Main {
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
+        logger.info("pokrenut main");
         Scanner scanner = new Scanner(System.in);
 
-        // Unos podataka za tri kategorije artikala
         Category[] categories = getCategories(scanner);
 
-        // Unos podataka za pet artikala
         Item[] items = getItems(scanner, categories);
 
-        // Unos podataka za dvije tvornice
         Factory[] factories = getFactories(scanner, items);
 
-        // Unos podataka za dvije trgovine
         Store[] stores = getStores(scanner, items);
 
-        // Ispis unesenih podataka
         System.out.println("Uneseni podaci:");
         System.out.println("Kategorije:");
         for (Category category : categories) {
@@ -168,9 +178,9 @@ public class Main {
             String categoryName = scanner.nextLine();
 
             if (existingCategoryNames.contains(categoryName)) {
-                // Ako već postoji kategorija s istim imenom, bacite iznimku ili ispišite poruku o grešci.
+
                 System.out.println("Kategorija s istim imenom već postoji. Unesite kategoriju s drugačijim imenom.");
-                i--; // Poništava trenutni unos.
+                i--;
             } else {
                 categories[i] = new Category(categoryName);
                 existingCategoryNames.add(categoryName);

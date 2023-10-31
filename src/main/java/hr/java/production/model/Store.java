@@ -1,10 +1,20 @@
 package hr.java.production.model;
 
+/**
+ * The type Store.
+ */
 public class Store extends NamedEntity{
 
     private String webAddress;
     private Item[] items;
 
+    /**
+     * Instantiates a new Store.
+     *
+     * @param name       the name
+     * @param webAddress the web address
+     * @param items      the items
+     */
     public Store(String name, String webAddress, Item[] items) {
         super(name);
         this.webAddress = webAddress;
@@ -19,18 +29,38 @@ public class Store extends NamedEntity{
         super.setName(name);
     }
 
+    /**
+     * Gets web address.
+     *
+     * @return the web address
+     */
     public String getWebAddress() {
         return webAddress;
     }
 
+    /**
+     * Sets web address.
+     *
+     * @param webAddress the web address
+     */
     public void setWebAddress(String webAddress) {
         this.webAddress = webAddress;
     }
 
+    /**
+     * Get items item [ ].
+     *
+     * @return the item [ ]
+     */
     public Item[] getItems() {
         return items;
     }
 
+    /**
+     * Sets items.
+     *
+     * @param items the items
+     */
     public void setItems(Item[] items) {
         this.items = items;
     }
