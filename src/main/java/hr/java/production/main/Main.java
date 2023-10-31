@@ -1,6 +1,7 @@
 package hr.java.production.main;
 
 import hr.java.production.exception.DuplicateItemException;
+import hr.java.production.exception.GradNepostojiExcepion;
 import hr.java.production.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import java.util.Scanner;
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static ArrayList<String> ListaGradova = new ArrayList<>();
 
     /**
      * The entry point of application.
@@ -28,12 +30,22 @@ public class Main {
     public static void main(String[] args) {
         logger.info("pokrenut main");
         Scanner scanner = new Scanner(System.in);
+        ArrayList<String> ListaGradova = new ArrayList<>();
+        ListaGradova.add("Zagreb");
+        ListaGradova.add("Samobor");
+        ListaGradova.add("Varaždin");
+        System.out.println("unesi grad");
 
         Category[] categories = getCategories(scanner);
 
         Item[] items = getItems(scanner, categories);
+        Factory[] factories = new Factory[0];
+        try {
+            factories = getFactories(scanner, items);
+        } catch (GradNepostojiExcepion ca) {
+            System.out.println("grad ne postoji");
+        }
 
-        Factory[] factories = getFactories(scanner, items);
 
         Store[] stores = getStores(scanner, items);
 
@@ -293,8 +305,8 @@ public class Main {
                     System.out.println("Prodajna cijena:");
                     BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
 
-                    for (int a = 0; a< items.length; a++){
-                        if (items[a].getName()==itemName){
+                    for (int a = 0; a < items.length; a++) {
+                        if (items[a].getName() == itemName) {
                             throw new DuplicateItemException(itemName);
                         }
                     }
@@ -307,7 +319,7 @@ public class Main {
             System.out.println("Invalid input. Please try again.");
             i--;
         } catch (DuplicateItemException e) {
-            System.out.println("unesen duplikat"+e.getMessage() );
+            System.out.println("unesen duplikat" + e.getMessage());
         }
 
 
@@ -315,7 +327,7 @@ public class Main {
     }
 
 
-    private static Factory[] getFactories(Scanner scanner, Item[] items) {
+    private static Factory[] getFactories(Scanner scanner, Item[] items) throws GradNepostojiExcepion {
         Factory[] factories = new Factory[2];
         for (int i = 0; i < 2; i++) {
             try {
@@ -329,8 +341,19 @@ public class Main {
                 System.out.println("Broj kuće:");
                 String houseNumber = scanner.nextLine();
 
-                System.out.println("Grad:");
-                String city = scanner.nextLine();
+
+                Boolean a = Boolean.TRUE;
+                String city = null;
+                while (a) {
+                    System.out.println("Grad:");
+                    if (!ListaGradova.contains(city)) {
+                        throw new GradNepostojiExcepion();
+                    } else {
+                        a = Boolean.FALSE;
+                        city = scanner.nextLine();
+                    }
+                }
+
 
                 System.out.println("Poštanski broj:");
                 String postalCode = scanner.nextLine();
@@ -346,6 +369,8 @@ public class Main {
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please try again.");
                 i--;
+            } catch (GradNepostojiExcepion a) {
+                System.out.println("Krivi upis");
             }
         }
         return factories;
