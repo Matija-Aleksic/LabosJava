@@ -3,6 +3,7 @@ package hr.java.production.main;
 import hr.java.production.Enum.City;
 import hr.java.production.exception.DuplicateItemException;
 import hr.java.production.model.*;
+import hr.java.production.sort.ProductionSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +32,9 @@ public class Main {
 
         ArrayList<Item> items = getItems(scanner, categories);
 
-        ArrayList<Factory> factories = (ArrayList<Factory>) getFactories(scanner, items);
+        Set<Factory> factories = getFactories(scanner, items);
 
-        ArrayList<Store> stores = getStores(scanner, items);
+        Set<Store> stores = getStores(scanner, items);
 
         System.out.println("Uneseni podaci:");
         System.out.println("Kategorije:");
@@ -57,28 +58,45 @@ public class Main {
         }
 
 
-        Factory largestVolumeFactory = factories.get(0);
-        Item largestVolumeItem = factories.get(0).getItems()[0];
+        Factory largestVolumeFactory = null;
+        Item largestVolumeItem = null;
+
         for (Factory factory : factories) {
             for (Item item : factory.getItems()) {
-                if (item.getVolume().compareTo(largestVolumeItem.getVolume()) > 0) {
+                if (largestVolumeFactory == null || item.getVolume().compareTo(largestVolumeItem.getVolume()) > 0) {
                     largestVolumeFactory = factory;
                     largestVolumeItem = item;
                 }
             }
         }
+
+        if (largestVolumeFactory != null) {
+            System.out.println("Factory with largest volume item: " + largestVolumeFactory.getName());
+            System.out.println("Largest volume item: " + largestVolumeItem.getName());
+        } else {
+            System.out.println("No factories or items found.");
+        }
         System.out.println("Factory with largest volume item: " + largestVolumeFactory.getName());
 
-        Store cheapestStore = stores.get(0);
-        Item cheapestItem = stores.get(0).getItems().get(0);
+        Store cheapestStore = null;
+        Item cheapestItem = null;
+
         for (Store store : stores) {
             for (Item item : store.getItems()) {
-                if (item.getSellingPrice().compareTo(cheapestItem.getSellingPrice()) < 0) {
+                if (cheapestStore == null || item.getSellingPrice().compareTo(cheapestItem.getSellingPrice()) < 0) {
                     cheapestStore = store;
                     cheapestItem = item;
                 }
             }
         }
+
+        if (cheapestStore != null) {
+            System.out.println("Store with the cheapest item: " + cheapestStore.getName());
+            System.out.println("Cheapest item: " + cheapestItem.getName());
+        } else {
+            System.out.println("No stores or items found.");
+        }
+
         System.out.println("Store with the cheapest item: " + cheapestStore.getName());
         System.out.println("Cheapest item: " + cheapestItem.getName());
 
@@ -142,10 +160,74 @@ public class Main {
             System.out.println("Trajanje garantnog roka (u mjesecima): " + shortestWarrantyDuration);
         }
 
+
+        Map<Category, List<Item>> categoryItemMap = new HashMap<>();
+
+        ProductionSorter ascendingSorter = new ProductionSorter(true);
+        ProductionSorter descendingSorter = new ProductionSorter(false);
+
+        for (Category category : categories) {
+            categoryItemMap.put(category, new ArrayList<>());
+        }
+
+        for (Item item : items) {
+            Category itemCategory = item.getCategory();
+            categoryItemMap.get(itemCategory).add(item);
+        }
+        for (Category category : categoryItemMap.keySet()) {
+            List<Item> itemList = categoryItemMap.get(category);
+
+            itemList.sort(ascendingSorter);
+            Item cheapestItem2 = itemList.get(0);
+            itemList.sort(descendingSorter);
+            Item mostExpensiveItem = itemList.get(0);
+
+            System.out.println("Najjeftiniji artikal u kategoriji " + category.getName() + ": " + cheapestItem2.getName());
+            System.out.println("Najskuplji artikal u kategoriji " + category.getName() + ": " + mostExpensiveItem.getName());
+        }
+
+
+        Item mostExpensiveEdible = null;
+        Item cheapestEdible = null;
+        Item mostExpensiveTechnical = null;
+        Item cheapestTechnical = null;
+
+        for (Item item : items) {
+            if (item instanceof Edible) {
+                if (mostExpensiveEdible == null || item.getSellingPrice().compareTo(mostExpensiveEdible.getSellingPrice()) > 0) {
+                    mostExpensiveEdible = item;
+                }
+                if (cheapestEdible == null || item.getSellingPrice().compareTo(cheapestEdible.getSellingPrice()) < 0) {
+                    cheapestEdible = item;
+                }
+            } else if (item instanceof Technical) {
+                if (mostExpensiveTechnical == null || item.getSellingPrice().compareTo(mostExpensiveTechnical.getSellingPrice()) > 0) {
+                    mostExpensiveTechnical = item;
+                }
+                if (cheapestTechnical == null || item.getSellingPrice().compareTo(cheapestTechnical.getSellingPrice()) < 0) {
+                    cheapestTechnical = item;
+                }
+            }
+        }
+
+        if (mostExpensiveEdible != null) {
+            System.out.println("Most Expensive Edible Item: " + mostExpensiveEdible.getName());
+        }
+        if (cheapestEdible != null) {
+            System.out.println("Cheapest Edible Item: " + cheapestEdible.getName());
+        }
+        if (mostExpensiveTechnical != null) {
+            System.out.println("Most Expensive Technical Item: " + mostExpensiveTechnical.getName());
+        }
+        if (cheapestTechnical != null) {
+            System.out.println("Cheapest Technical Item: " + cheapestTechnical.getName());
+        }
+
+
     }
 
-    private static ArrayList<Store> getStores(Scanner scanner, ArrayList<Item> items) {
-        ArrayList<Store> stores = new ArrayList<>();
+    private static Set<Store> getStores(Scanner scanner, ArrayList<Item> items) {
+        Set<Store> stores = null;
 
         int i = 0;
         try {
@@ -162,7 +244,6 @@ public class Main {
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            i--;
         }
 
         return stores;
@@ -349,4 +430,9 @@ public class Main {
     }
 
 
+
 }
+
+
+
+
