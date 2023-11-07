@@ -1,5 +1,6 @@
 package hr.java.production.main;
 
+import hr.java.production.Enum.City;
 import hr.java.production.exception.DuplicateItemException;
 import hr.java.production.model.*;
 import org.slf4j.Logger;
@@ -333,8 +334,7 @@ public class Main {
                 Address factoryAddress = new Address.Builder()
                         .setStreet(street)
                         .setHouseNumber(houseNumber)
-                        .setCity(city)
-                        .setPostalCode(postalCode)
+                        .setCity(City.valueOf(city))
                         .build();
 
                 Factory factory = new Factory(factoryName, factoryAddress, new HashSet<>(items).toArray(new Item[0]));
