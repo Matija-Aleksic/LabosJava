@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * The type Bread.
@@ -52,5 +53,18 @@ public class Bread extends Item implements Edible {
     @Override
     public BigDecimal calculatePrice(double weight) {
         return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bread bread)) return false;
+        if (!super.equals(o)) return false;
+        return caloriesPerKilogram == bread.caloriesPerKilogram && getWeight() == bread.getWeight();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), caloriesPerKilogram, getWeight());
     }
 }

@@ -8,4 +8,5 @@ public record Discount() {
      * The constant discountAmount.
      */
     static double discountAmount;
+
 }

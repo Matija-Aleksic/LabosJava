@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Objects;
+
 /**
  * The type Category.
  */
@@ -52,5 +54,18 @@ public class Category extends NamedEntity {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category category)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(getDescription(), category.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getDescription());
     }
 }

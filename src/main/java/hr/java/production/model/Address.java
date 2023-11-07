@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Objects;
+
 /**
  * The type Address.
  */
@@ -117,6 +119,18 @@ public class Address {
          */
         public Address build() {
             return new Address(this);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Builder builder)) return false;
+            return Objects.equals(street, builder.street) && Objects.equals(houseNumber, builder.houseNumber) && Objects.equals(city, builder.city) && Objects.equals(postalCode, builder.postalCode);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(street, houseNumber, city, postalCode);
         }
     }
 }

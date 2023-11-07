@@ -1,5 +1,8 @@
 package hr.java.production.model;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * The type Factory.
  */
@@ -7,6 +10,8 @@ public class Factory extends NamedEntity{
 
     private Address address;
     private Item[] items;
+
+
 
     /**
      * Instantiates a new Factory.
@@ -63,5 +68,20 @@ public class Factory extends NamedEntity{
      */
     public void setItems(Item[] items) {
         this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Factory factory)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(getAddress(), factory.getAddress()) && Arrays.equals(getItems(), factory.getItems());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), getAddress());
+        result = 31 * result + Arrays.hashCode(getItems());
+        return result;
     }
 }

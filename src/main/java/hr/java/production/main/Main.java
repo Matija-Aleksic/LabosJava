@@ -6,11 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.nio.channels.ScatteringByteChannel;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 /**
@@ -29,13 +25,14 @@ public class Main {
         logger.info("pokrenut main");
         Scanner scanner = new Scanner(System.in);
 
-        Category[] categories = getCategories(scanner);
 
-        Item[] items = getItems(scanner, categories);
+        ArrayList<Category> categories = getCategories(scanner);
 
-        Factory[] factories = getFactories(scanner, items);
+        ArrayList<Item> items = getItems(scanner, categories);
 
-        Store[] stores = getStores(scanner, items);
+        ArrayList<Factory> factories = (ArrayList<Factory>) getFactories(scanner, items);
+
+        ArrayList<Store> stores = getStores(scanner, items);
 
         System.out.println("Uneseni podaci:");
         System.out.println("Kategorije:");
@@ -59,8 +56,8 @@ public class Main {
         }
 
 
-        Factory largestVolumeFactory = factories[0];
-        Item largestVolumeItem = factories[0].getItems()[0];
+        Factory largestVolumeFactory = factories.get(0);
+        Item largestVolumeItem = factories.get(0).getItems()[0];
         for (Factory factory : factories) {
             for (Item item : factory.getItems()) {
                 if (item.getVolume().compareTo(largestVolumeItem.getVolume()) > 0) {
@@ -71,8 +68,8 @@ public class Main {
         }
         System.out.println("Factory with largest volume item: " + largestVolumeFactory.getName());
 
-        Store cheapestStore = stores[0];
-        Item cheapestItem = stores[0].getItems()[0];
+        Store cheapestStore = stores.get(0);
+        Item cheapestItem = stores.get(0).getItems().get(0);
         for (Store store : stores) {
             for (Item item : store.getItems()) {
                 if (item.getSellingPrice().compareTo(cheapestItem.getSellingPrice()) < 0) {
@@ -146,8 +143,9 @@ public class Main {
 
     }
 
-    private static Store[] getStores(Scanner scanner, Item[] items) {
-        Store[] stores = new Store[2];
+    private static ArrayList<Store> getStores(Scanner scanner, ArrayList<Item> items) {
+        ArrayList<Store> stores = new ArrayList<>();
+
         int i = 0;
         try {
             for (i = 0; i < 2; i++) {
@@ -158,9 +156,9 @@ public class Main {
                 System.out.println("Web adresa:");
                 String webAddress = scanner.nextLine();
 
-                stores[i] = new Store(storeName, webAddress, items);
+                Store store = new Store(storeName, webAddress, items);
+                stores.add(store);
             }
-
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
             i--;
@@ -169,20 +167,20 @@ public class Main {
         return stores;
     }
 
-    private static Category[] getCategories(Scanner scanner) {
-        Category[] categories = new Category[3];
-        List<String> existingCategoryNames = new ArrayList<>();
+    private static ArrayList<Category> getCategories(Scanner scanner) {
+        ArrayList<Category> categories = new ArrayList<>();
+        ArrayList<String> existingCategoryNames = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             System.out.println("Unesite naziv kategorije " + (i + 1) + ":");
             String categoryName = scanner.nextLine();
 
             if (existingCategoryNames.contains(categoryName)) {
-
                 System.out.println("Kategorija s istim imenom već postoji. Unesite kategoriju s drugačijim imenom.");
                 i--;
             } else {
-                categories[i] = new Category(categoryName);
+                Category category = new Category(categoryName);
+                categories.add(category);
                 existingCategoryNames.add(categoryName);
             }
         }
@@ -190,11 +188,10 @@ public class Main {
         return categories;
     }
 
-    private static Item[] getItems(Scanner scanner, Category[] categories) {
-        Item[] items = new Item[5];
-        int i = 0;
+    private static ArrayList<Item> getItems(Scanner scanner, ArrayList<Category> categories) {
+        ArrayList<Item> items = new ArrayList<>();
         try {
-            for (i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 System.out.println("Unesite podatke za artikal " + (i + 1) + ":");
                 System.out.println("Dali je artikal Hrana/jestiv? (y/n) ili laptop");
 
@@ -205,13 +202,11 @@ public class Main {
 
                     if (choice.equals("bread") || choice.equals("milk")) {
                         int weight;
-                        int j = 0;
-                        int n = 0;
 
                         System.out.println("Naziv:");
                         String itemName = scanner.nextLine();
 
-                        Category itemCategory = categories[0];
+                        Category itemCategory = categories.get(0);
 
                         System.out.println("Širina:");
                         BigDecimal width = new BigDecimal(scanner.nextLine());
@@ -232,18 +227,13 @@ public class Main {
                         BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
 
                         if (choice.equals("bread")) {
-                            Bread[] breads = new Bread[1];
-                            breads[j] = new Bread(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
-                            items[i] = breads[j];
-                            breads[j].calculateKilocalories();
-                            j++;
-
+                            Bread bread = new Bread(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                            bread.calculateKilocalories();
+                            items.add(bread);
                         } else if (choice.equals("milk")) {
-                            Milk[] milks = new Milk[1];
-                            milks[n] = new Milk(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
-                            items[i] = milks[n];
-                            milks[n].calculateKilocalories();
-                            n++;
+                            Milk milk = new Milk(itemName, itemCategory, width, height, length, productionCost, sellingPrice, weight);
+                            milk.calculateKilocalories();
+                            items.add(milk);
                         }
                     }
                 } else if (choice.equals("laptop")) {
@@ -268,15 +258,15 @@ public class Main {
                     System.out.println("Trajanje garantnog roka (u mjesecima):");
                     int warrantyDuration = Integer.parseInt(scanner.nextLine());
 
-                    Laptop laptop = new Laptop(itemName, categories[0], width, height, length, productionCost, sellingPrice, warrantyDuration);
-                    items[i] = laptop;
+                    Laptop laptop = new Laptop(itemName, categories.get(0), width, height, length, productionCost, sellingPrice, warrantyDuration);
+                    items.add(laptop);
                 } else {
                     System.out.println("Naziv:");
                     String itemName = scanner.nextLine();
 
                     System.out.println("Kategorija (unesite broj 2 ili 3):");
                     int categoryIndex = Integer.parseInt(scanner.nextLine()) - 1;
-                    Category itemCategory = categories[categoryIndex];
+                    Category itemCategory = categories.get(categoryIndex);
 
                     System.out.println("Širina:");
                     BigDecimal width = new BigDecimal(scanner.nextLine());
@@ -293,30 +283,35 @@ public class Main {
                     System.out.println("Prodajna cijena:");
                     BigDecimal sellingPrice = new BigDecimal(scanner.nextLine());
 
-                    for (int a = 0; a< items.length; a++){
-                        if (items[a].getName()==itemName){
-                            throw new DuplicateItemException(itemName);
+                    boolean isDuplicate = false;
+                    for (Item item : items) {
+                        if (item.getName().equals(itemName)) {
+                            isDuplicate = true;
+                            break;
                         }
                     }
 
-                    items[i] = new Item(itemName, itemCategory, width, height, length, productionCost, sellingPrice);
+                    if (isDuplicate) {
+                        throw new DuplicateItemException(itemName);
+                    }
+
+                    Item newItem = new Item(itemName, itemCategory, width, height, length, productionCost, sellingPrice);
+                    items.add(newItem);
                 }
             }
-
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            i--;
         } catch (DuplicateItemException e) {
-            System.out.println("unesen duplikat"+e.getMessage() );
+            System.out.println("unesen duplikat " + e.getMessage());
         }
-
 
         return items;
     }
 
 
-    private static Factory[] getFactories(Scanner scanner, Item[] items) {
-        Factory[] factories = new Factory[2];
+    private static Set<Factory> getFactories(Scanner scanner, ArrayList<Item> items) {
+        Set<Factory> factories = new HashSet<>();
+
         for (int i = 0; i < 2; i++) {
             try {
                 System.out.println("Unesite podatke za tvornicu " + (i + 1) + ":");
@@ -342,12 +337,14 @@ public class Main {
                         .setPostalCode(postalCode)
                         .build();
 
-                factories[i] = new Factory(factoryName, factoryAddress, items);
+                Factory factory = new Factory(factoryName, factoryAddress, new HashSet<>(items).toArray(new Item[0]));
+                factories.add(factory);
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please try again.");
                 i--;
             }
         }
+
         return factories;
     }
 

@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * The type Item.
@@ -208,4 +209,16 @@ public class Item extends NamedEntity {
         this.sellingPrice = sellingPrice;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item item)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(getCategory(), item.getCategory()) && Objects.equals(getWidth(), item.getWidth()) && Objects.equals(getHeight(), item.getHeight()) && Objects.equals(getLength(), item.getLength()) && Objects.equals(getProductionCost(), item.getProductionCost()) && Objects.equals(getSellingPrice(), item.getSellingPrice()) && Objects.equals(getDiscount(), item.getDiscount());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getCategory(), getWidth(), getHeight(), getLength(), getProductionCost(), getSellingPrice(), getDiscount());
+    }
 }

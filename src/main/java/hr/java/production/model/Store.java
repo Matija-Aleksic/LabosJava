@@ -1,12 +1,14 @@
 package hr.java.production.model;
 
+import java.util.ArrayList;
+
 /**
  * The type Store.
  */
 public class Store extends NamedEntity{
 
     private String webAddress;
-    private Item[] items;
+    private ArrayList<Item> items;
 
     /**
      * Instantiates a new Store.
@@ -15,7 +17,7 @@ public class Store extends NamedEntity{
      * @param webAddress the web address
      * @param items      the items
      */
-    public Store(String name, String webAddress, Item[] items) {
+    public Store(String name, String webAddress, ArrayList<Item> items) {
         super(name);
         this.webAddress = webAddress;
         this.items = items;
@@ -52,7 +54,7 @@ public class Store extends NamedEntity{
      *
      * @return the item [ ]
      */
-    public Item[] getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
@@ -61,7 +63,7 @@ public class Store extends NamedEntity{
      *
      * @param items the items
      */
-    public void setItems(Item[] items) {
+    public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 }

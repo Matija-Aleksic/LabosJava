@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Objects;
+
 /**
  * The type Named entity.
  */
@@ -31,5 +33,17 @@ public abstract class NamedEntity {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NamedEntity that)) return false;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }

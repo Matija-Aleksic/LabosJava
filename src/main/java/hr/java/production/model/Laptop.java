@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * The type Laptop.
@@ -48,4 +49,16 @@ public final class Laptop extends Item implements Technical {
         return warrantyDurationInMonths;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Laptop laptop)) return false;
+        if (!super.equals(o)) return false;
+        return getWarrantyDurationInMonths() == laptop.getWarrantyDurationInMonths();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getWarrantyDurationInMonths());
+    }
 }
