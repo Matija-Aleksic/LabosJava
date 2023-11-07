@@ -3,6 +3,7 @@ package hr.java.production.main;
 import hr.java.production.Enum.City;
 import hr.java.production.exception.DuplicateItemException;
 import hr.java.production.model.*;
+import hr.java.production.sort.LaptopWarrantyComparator;
 import hr.java.production.sort.ProductionSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -219,6 +220,33 @@ public class Main {
             System.out.println("Cheapest Technical Item: " + cheapestTechnical.getName());
         }
 
+
+        ArrayList<Laptop> laps = null;
+        for (Item item : items) {
+            if (item instanceof Laptop) {
+                laps = new ArrayList<>();
+                Laptop laptop = (Laptop) item;
+                laps.add(laptop);
+            }
+
+        }
+        laps.stream()
+                .sorted(new LaptopWarrantyComparator())
+                .forEach(laptop -> System.out.println(laptop.getName()));
+        int c =0;
+        double suma = 0;
+        for (Laptop laptop : laps){
+            if (laptop.getSellingPrice().compareTo(BigDecimal.valueOf(30))>0){
+                c++;
+                suma += laptop.getWarrantyDurationInMonths();
+            }
+        }
+        System.out.println("prosjecna garancija je "  + suma/c + "mjeseci");
+
+
+        for (Laptop laptop : laps){
+            System.out.println(laptop.getName());
+        }
 
     }
 
