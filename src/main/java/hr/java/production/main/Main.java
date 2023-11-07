@@ -108,17 +108,14 @@ public class Main {
         int shortestWarrantyDuration = Integer.MAX_VALUE;
 
         for (Item item : items) {
-            if (item instanceof Edible) {
+            if (item instanceof Edible edibleItem) {
 
-                Edible edibleItem = (Edible) item;
                 int kilocalories = edibleItem.calculateKilocalories();
                 BigDecimal totalPrice = BigDecimal.valueOf(0);
 
-                if (item instanceof Bread) {
-                    Bread bread = (Bread) item;
+                if (item instanceof Bread bread) {
                     totalPrice = edibleItem.calculatePrice(bread.getWeight());
-                } else if (item instanceof Milk) {
-                    Milk milk = (Milk) item;
+                } else if (item instanceof Milk milk) {
                     totalPrice = edibleItem.calculatePrice(milk.getWeight());
                 }
 
@@ -132,8 +129,7 @@ public class Main {
                     foodWithMaxTotalPrice = item;
                 }
             }
-            if (item instanceof Laptop) {
-                Laptop laptop = (Laptop) item;
+            if (item instanceof Laptop laptop) {
                 int warrantyDuration = laptop.getWarrantyDurationInMonths();
                 if (warrantyDuration < shortestWarrantyDuration) {
                     shortestWarrantyDuration = warrantyDuration;
@@ -412,11 +408,7 @@ public class Main {
                 System.out.println("Poštanski broj:");
                 String postalCode = scanner.nextLine();
 
-                Address factoryAddress = new Address.Builder()
-                        .setStreet(street)
-                        .setHouseNumber(houseNumber)
-                        .setCity(City.valueOf(city))
-                        .build();
+                Address factoryAddress = new Address.Builder().setStreet(street).setHouseNumber(houseNumber).setCity(City.valueOf(city)).build();
 
                 Factory factory = new Factory(factoryName, factoryAddress, new HashSet<>(items).toArray(new Item[0]));
                 factories.add(factory);
@@ -428,7 +420,6 @@ public class Main {
 
         return factories;
     }
-
 
 
 }

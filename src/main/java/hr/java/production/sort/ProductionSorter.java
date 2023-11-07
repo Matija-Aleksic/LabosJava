@@ -4,9 +4,17 @@ import hr.java.production.model.Item;
 
 import java.util.Comparator;
 
+/**
+ * The type Production sorter.
+ */
 public class ProductionSorter implements Comparator<Item> {
-    private boolean ascending;
+    private final boolean ascending;
 
+    /**
+     * Instantiates a new Production sorter.
+     *
+     * @param ascending the ascending
+     */
     public ProductionSorter(boolean ascending) {
         this.ascending = ascending;
     }

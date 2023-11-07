@@ -1,17 +1,17 @@
 package hr.java.production.model;
 
-import java.util.Objects;
-
 import hr.java.production.Enum.City;
+
+import java.util.Objects;
 
 
 /**
  * The type Address.
  */
 public class Address {
-    private String street;
-    private String houseNumber;
-    private City city; // Promijenjena varijabla city da koristi enum City
+    private final String street;
+    private final String houseNumber;
+    private final City city; // Promijenjena varijabla city da koristi enum City
 
     /**
      * Konstruktor za Address s Builder obrascem
@@ -27,7 +27,7 @@ public class Address {
     /**
      * Gets street.
      *
-     * @return ulica
+     * @return ulica street
      */
     public String getStreet() {
         return street;
@@ -63,7 +63,7 @@ public class Address {
          * Sets street.
          *
          * @param street ulica
-         * @return graditelj
+         * @return graditelj street
          */
         public Builder setStreet(String street) {
             this.street = street;
@@ -74,7 +74,7 @@ public class Address {
          * Sets house number.
          *
          * @param houseNumber kućni broj
-         * @return graditelj
+         * @return graditelj house number
          */
         public Builder setHouseNumber(String houseNumber) {
             this.houseNumber = houseNumber;
@@ -85,7 +85,7 @@ public class Address {
          * Sets city.
          *
          * @param city grad (enum City)
-         * @return graditelj
+         * @return graditelj city
          */
         public Builder setCity(City city) {
             this.city = city;
@@ -95,7 +95,7 @@ public class Address {
         /**
          * Build address.
          *
-         * @return adresa
+         * @return adresa address
          */
         public Address build() {
             return new Address(this);

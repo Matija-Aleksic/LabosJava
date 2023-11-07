@@ -6,8 +6,8 @@ import java.util.Objects;
 /**
  * The type Milk.
  */
-public class Milk extends Item implements Edible{
-    private int caloriesPerKilogram = 42;
+public class Milk extends Item implements Edible {
+    private final int caloriesPerKilogram = 42;
     private Integer weight;
 
     /**
@@ -47,12 +47,12 @@ public class Milk extends Item implements Edible{
 
     @Override
     public int calculateKilocalories() {
-        return caloriesPerKilogram*weight;
+        return caloriesPerKilogram * weight;
     }
 
     @Override
     public BigDecimal calculatePrice(double weight) {
-        return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
+        return BigDecimal.valueOf(weight).multiply(super.getSellingPrice());
     }
 
     @Override

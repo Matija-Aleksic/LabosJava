@@ -7,7 +7,7 @@ import java.util.Objects;
  * The type Bread.
  */
 public class Bread extends Item implements Edible {
-    private int caloriesPerKilogram = 265;
+    private final int caloriesPerKilogram = 265;
     private int weight;
 
     /**
@@ -47,12 +47,12 @@ public class Bread extends Item implements Edible {
 
     @Override
     public int calculateKilocalories() {
-        return caloriesPerKilogram*weight;
+        return caloriesPerKilogram * weight;
     }
 
     @Override
     public BigDecimal calculatePrice(double weight) {
-        return BigDecimal.valueOf(weight).multiply(super.getSellingPrice()) ;
+        return BigDecimal.valueOf(weight).multiply(super.getSellingPrice());
     }
 
     @Override

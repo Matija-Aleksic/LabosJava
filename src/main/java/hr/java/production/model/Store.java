@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * The type Store.
  */
-public class Store extends NamedEntity{
+public class Store extends NamedEntity {
 
     private String webAddress;
     private ArrayList<Item> items;

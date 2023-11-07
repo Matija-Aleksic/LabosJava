@@ -194,10 +194,11 @@ public class Item extends NamedEntity {
         double price = sellingPrice.doubleValue();
         if (discount != null) {
             // Preračunaj cijenu s obzirom na popust
-            price *= (1 - discount.discountAmount / 100.0);
+            price *= (1 - Discount.discountAmount / 100.0);
             return BigDecimal.valueOf(price);
-        }else {
-        return sellingPrice;}
+        } else {
+            return sellingPrice;
+        }
     }
 
     /**

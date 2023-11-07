@@ -6,11 +6,10 @@ import java.util.Objects;
 /**
  * The type Factory.
  */
-public class Factory extends NamedEntity{
+public class Factory extends NamedEntity {
 
     private Address address;
     private Item[] items;
-
 
 
     /**
