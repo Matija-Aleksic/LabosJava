@@ -226,4 +226,18 @@ public class Item extends NamedEntity {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getCategory(), getWidth(), getHeight(), getLength(), getProductionCost(), getSellingPrice(), getDiscount());
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + getName() + '\'' +
+                ", category=" + getCategory() +
+                ", width=" + getWidth() +
+                ", height=" + getHeight() +
+                ", length=" + getLength() +
+                ", productionCost=" + getProductionCost() +
+                ", sellingPrice=" + getSellingPrice() +
+                ", discount=" + getDiscount() +
+                '}';
+    }
 }

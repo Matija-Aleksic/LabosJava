@@ -6,10 +6,13 @@ import hr.java.production.genericsi.FoodStore;
 import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
 import hr.java.production.sort.ProductionSorter;
+import hr.java.production.sort.VolumeComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -236,10 +239,37 @@ public class Main {
 
         findStoresWithAboveAverageNumberOfItems(technicalStore, foodStore);
 
+        Instant startNonLambdaSort = Instant.now();
+        sortItemsByVolumeWithoutLambda(technicalStore.getItems());
+        Instant endNonLambdaSort = Instant.now();
+        Duration nonLambdaSortDuration = Duration.between(startNonLambdaSort, endNonLambdaSort);
+        System.out.println("Vrijeme sortiranja bez lambda izraza: " + nonLambdaSortDuration.toMillis() + " ms");
+        Optional<Item> itemWithDiscount = findItemWithDiscountGreaterThanZero(technicalStore.getItems());
 
 
+        itemWithDiscount.ifPresent(item -> System.out.println("Pronađen artikl s popustom: " + item.getName()));
+        if (itemWithDiscount.isEmpty()) {
+            System.out.println("Nije pronađen artikl s popustom većim od 0.");
+        }
+
+
+        Map<String, Long> storeItemCount = stores.stream()
+                .collect(Collectors.toMap(Store::getName, store -> (long) store.getItems().size()));
+
+        storeItemCount.forEach((store, count) -> System.out.println(store + ": " + count + " items"));
 
     }
+
+
+
+
+    private static Optional<Item> findItemWithDiscountGreaterThanZero(List<? extends Item> items) {
+        return (Optional<Item>) items.stream()
+                .filter(item -> item.getDiscount().getDiscountAmount() > 0)
+                .findFirst();
+    }
+
+
 
     private static void sortItemsByVolume(List<? extends Item> items) {
         Collections.sort(items, (item1, item2) ->
@@ -248,6 +278,15 @@ public class Main {
         for (Item item : items) {
             System.out.println(item.getName() + ": " + item.getVolume());
         }
+    }
+    private static void sortItemsByVolumeLambda(List<? extends Item> items) {
+        Collections.sort(items, (item1, item2) ->
+                item1.getVolume().compareTo(item2.getVolume()));
+    }
+
+    // Metoda za sortiranje bez lambda izraza
+    private static void sortItemsByVolumeWithoutLambda(List<? extends Item> items) {
+        Collections.sort(items, new VolumeComparator(Boolean.TRUE));
     }
 
 
