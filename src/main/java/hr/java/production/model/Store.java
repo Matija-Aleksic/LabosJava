@@ -66,4 +66,9 @@ public class Store extends NamedEntity {
     public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
+    public int getNumberOfItems() {
+        return items.size();
+    }
+
+
 }

@@ -200,6 +200,10 @@ public class Item extends NamedEntity {
             return sellingPrice;
         }
     }
+    public double getSellingPriceinDouble() {
+        double price = sellingPrice.doubleValue();
+        return price;
+    }
 
     /**
      * Sets selling price.

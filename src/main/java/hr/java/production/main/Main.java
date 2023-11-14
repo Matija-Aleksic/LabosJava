@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -231,6 +232,9 @@ public class Main {
 
         sortItemsByVolume((ArrayList<? extends Item>) technicalStore.getTechnicalItems());
         sortItemsByVolume((ArrayList<? extends Item>) foodStore.getEdibleItems());
+        calculateAveragePriceOfItemsWithAboveAverageVolume(technicalStore.getItems());
+
+        findStoresWithAboveAverageNumberOfItems(technicalStore, foodStore);
 
 
 
@@ -265,6 +269,44 @@ private static ArrayList<Item> getTehnical(ArrayList<Item> items){
         }
         return food;
     }
+    private static void calculateAveragePriceOfItemsWithAboveAverageVolume(List<? extends Item> items) {
+        BigDecimal averageVolume = calculateAverageVolume(items);
+
+        double averagePrice = items.stream()
+                .filter(item -> item.getVolume().compareTo(averageVolume) > 0)
+                .mapToDouble(Item::getSellingPriceinDouble)
+                .average()
+                .orElse(0.0);
+
+        System.out.println("Srednja cijena artikala s natprosječnim volumenom: " + averagePrice);
+    }
+
+    private static BigDecimal calculateAverageVolume(List<? extends Item> items) {
+        BigDecimal totalVolume = items.stream()
+                .map(Item::getVolume)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return totalVolume.divide(BigDecimal.valueOf(items.size()), BigDecimal.ROUND_HALF_UP);
+    }
+    private static void findStoresWithAboveAverageNumberOfItems(Store... stores) {
+        double averageNumberOfItems = calculateAverageNumberOfItems(stores);
+
+        List<Store> storesWithAboveAverageItems = Arrays.stream(stores)
+                .filter(store -> store.getItems().size() > averageNumberOfItems)
+                .collect(Collectors.toList());
+
+        System.out.println("Trgovine s natprosječnim brojem artikala:");
+        storesWithAboveAverageItems.forEach(store -> System.out.println(store.getName()));
+    }
+
+    private static double calculateAverageNumberOfItems(Store... stores) {
+        return Arrays.stream(stores)
+                .mapToDouble(Store::getNumberOfItems)
+                .average()
+                .orElse(0.0);
+    }
+
+
 
     private static Set<Store> getStores(Scanner scanner, ArrayList<Item> items) {
         Set<Store> stores = null;
