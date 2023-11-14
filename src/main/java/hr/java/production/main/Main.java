@@ -2,6 +2,8 @@ package hr.java.production.main;
 
 import hr.java.production.Enum.City;
 import hr.java.production.exception.DuplicateItemException;
+import hr.java.production.genericsi.FoodStore;
+import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
 import hr.java.production.sort.ProductionSorter;
 import org.slf4j.Logger;
@@ -35,6 +37,11 @@ public class Main {
         Set<Factory> factories = getFactories(scanner, items);
 
         Set<Store> stores = getStores(scanner, items);
+
+        ArrayList<Item> tehnika = getTehnical(items);
+
+        ArrayList<Item> hrana = getEdible(items);
+
 
         System.out.println("Uneseni podaci:");
         System.out.println("Kategorije:");
@@ -219,7 +226,44 @@ public class Main {
             System.out.println("Cheapest Technical Item: " + cheapestTechnical.getName());
         }
 
+        TechnicalStore<Technical> technicalStore = new TechnicalStore<>("tehStore","www.tehstore.hr", tehnika);
+        FoodStore<Edible> foodStore = new FoodStore<>("tehStore","www.tehstore.hr", hrana);
 
+        sortItemsByVolume((ArrayList<? extends Item>) technicalStore.getTechnicalItems());
+        sortItemsByVolume((ArrayList<? extends Item>) foodStore.getEdibleItems());
+
+
+
+
+    }
+
+    private static void sortItemsByVolume(List<? extends Item> items) {
+        Collections.sort(items, (item1, item2) ->
+                item1.getVolume().compareTo(item2.getVolume()));
+        System.out.println("Sortirani artikli po volumenu:");
+        for (Item item : items) {
+            System.out.println(item.getName() + ": " + item.getVolume());
+        }
+    }
+
+
+private static ArrayList<Item> getTehnical(ArrayList<Item> items){
+        ArrayList<Item> laps = new ArrayList<>();
+        for(Item item : items){
+            if(item instanceof Technical){
+                laps.add(item);
+            }
+        }
+        return laps;
+    }
+    private static ArrayList<Item> getEdible(ArrayList<Item> items){
+        ArrayList<Item> food = new ArrayList<>();
+        for(Item item : items){
+            if(item instanceof Edible){
+                food.add(item);
+            }
+        }
+        return food;
     }
 
     private static Set<Store> getStores(Scanner scanner, ArrayList<Item> items) {
