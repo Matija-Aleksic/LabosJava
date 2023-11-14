@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -230,8 +231,8 @@ public class Main {
             System.out.println("Cheapest Technical Item: " + cheapestTechnical.getName());
         }
 
-        TechnicalStore<Technical> technicalStore = new TechnicalStore<>("tehStore","www.tehstore.hr", tehnika);
-        FoodStore<Edible> foodStore = new FoodStore<>("tehStore","www.tehstore.hr", hrana);
+        TechnicalStore<Technical> technicalStore = new TechnicalStore<>("tehStore", "www.tehstore.hr", tehnika);
+        FoodStore<Edible> foodStore = new FoodStore<>("tehStore", "www.tehstore.hr", hrana);
 
         sortItemsByVolume((ArrayList<? extends Item>) technicalStore.getTechnicalItems());
         sortItemsByVolume((ArrayList<? extends Item>) foodStore.getEdibleItems());
@@ -253,35 +254,28 @@ public class Main {
         }
 
 
-        Map<String, Long> storeItemCount = stores.stream()
-                .collect(Collectors.toMap(Store::getName, store -> (long) store.getItems().size()));
+        Map<String, Long> storeItemCount = stores.stream().collect(Collectors.toMap(Store::getName, store -> (long) store.getItems().size()));
 
         storeItemCount.forEach((store, count) -> System.out.println(store + ": " + count + " items"));
 
     }
 
 
-
-
     private static Optional<Item> findItemWithDiscountGreaterThanZero(List<? extends Item> items) {
-        return (Optional<Item>) items.stream()
-                .filter(item -> item.getDiscount().getDiscountAmount() > 0)
-                .findFirst();
+        return (Optional<Item>) items.stream().filter(item -> item.getDiscount().getDiscountAmount() > 0).findFirst();
     }
 
 
-
     private static void sortItemsByVolume(List<? extends Item> items) {
-        Collections.sort(items, (item1, item2) ->
-                item1.getVolume().compareTo(item2.getVolume()));
+        Collections.sort(items, (item1, item2) -> item1.getVolume().compareTo(item2.getVolume()));
         System.out.println("Sortirani artikli po volumenu:");
         for (Item item : items) {
             System.out.println(item.getName() + ": " + item.getVolume());
         }
     }
+
     private static void sortItemsByVolumeLambda(List<? extends Item> items) {
-        Collections.sort(items, (item1, item2) ->
-                item1.getVolume().compareTo(item2.getVolume()));
+        Collections.sort(items, (item1, item2) -> item1.getVolume().compareTo(item2.getVolume()));
     }
 
     // Metoda za sortiranje bez lambda izraza
@@ -290,61 +284,52 @@ public class Main {
     }
 
 
-private static ArrayList<Item> getTehnical(ArrayList<Item> items){
+    private static ArrayList<Item> getTehnical(ArrayList<Item> items) {
         ArrayList<Item> laps = new ArrayList<>();
-        for(Item item : items){
-            if(item instanceof Technical){
+        for (Item item : items) {
+            if (item instanceof Technical) {
                 laps.add(item);
             }
         }
         return laps;
     }
-    private static ArrayList<Item> getEdible(ArrayList<Item> items){
+
+    private static ArrayList<Item> getEdible(ArrayList<Item> items) {
         ArrayList<Item> food = new ArrayList<>();
-        for(Item item : items){
-            if(item instanceof Edible){
+        for (Item item : items) {
+            if (item instanceof Edible) {
                 food.add(item);
             }
         }
         return food;
     }
+
     private static void calculateAveragePriceOfItemsWithAboveAverageVolume(List<? extends Item> items) {
         BigDecimal averageVolume = calculateAverageVolume(items);
 
-        double averagePrice = items.stream()
-                .filter(item -> item.getVolume().compareTo(averageVolume) > 0)
-                .mapToDouble(Item::getSellingPriceinDouble)
-                .average()
-                .orElse(0.0);
+        double averagePrice = items.stream().filter(item -> item.getVolume().compareTo(averageVolume) > 0).mapToDouble(Item::getSellingPriceinDouble).average().orElse(0.0);
 
         System.out.println("Srednja cijena artikala s natprosječnim volumenom: " + averagePrice);
     }
 
     private static BigDecimal calculateAverageVolume(List<? extends Item> items) {
-        BigDecimal totalVolume = items.stream()
-                .map(Item::getVolume)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalVolume = items.stream().map(Item::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return totalVolume.divide(BigDecimal.valueOf(items.size()), BigDecimal.ROUND_HALF_UP);
+        return totalVolume.divide(BigDecimal.valueOf(items.size()), RoundingMode.HALF_UP);
     }
+
     private static void findStoresWithAboveAverageNumberOfItems(Store... stores) {
         double averageNumberOfItems = calculateAverageNumberOfItems(stores);
 
-        List<Store> storesWithAboveAverageItems = Arrays.stream(stores)
-                .filter(store -> store.getItems().size() > averageNumberOfItems)
-                .collect(Collectors.toList());
+        List<Store> storesWithAboveAverageItems = Arrays.stream(stores).filter(store -> store.getItems().size() > averageNumberOfItems).collect(Collectors.toList());
 
         System.out.println("Trgovine s natprosječnim brojem artikala:");
         storesWithAboveAverageItems.forEach(store -> System.out.println(store.getName()));
     }
 
     private static double calculateAverageNumberOfItems(Store... stores) {
-        return Arrays.stream(stores)
-                .mapToDouble(Store::getNumberOfItems)
-                .average()
-                .orElse(0.0);
+        return Arrays.stream(stores).mapToDouble(Store::getNumberOfItems).average().orElse(0.0);
     }
-
 
 
     private static Set<Store> getStores(Scanner scanner, ArrayList<Item> items) {

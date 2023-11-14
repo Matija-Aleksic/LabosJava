@@ -7,19 +7,41 @@ import hr.java.production.model.Store;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Food store.
+ *
+ * @param <T> the type parameter
+ */
 public class FoodStore<T extends Edible> extends Store {
 
-    private List<T> edibleItems;
+    private final List<T> edibleItems;
 
+    /**
+     * Instantiates a new Food store.
+     *
+     * @param name       the name
+     * @param webAddress the web address
+     * @param items      the items
+     */
     public FoodStore(String name, String webAddress, ArrayList<Item> items) {
         super(name,webAddress,items);
         this.edibleItems = new ArrayList<>();
     }
 
+    /**
+     * Add item.
+     *
+     * @param item the item
+     */
     public void addItem(T item) {
         edibleItems.add(item);
     }
 
+    /**
+     * Gets edible items.
+     *
+     * @return the edible items
+     */
     public List<T> getEdibleItems() {
         return edibleItems;
     }

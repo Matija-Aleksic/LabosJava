@@ -4,11 +4,14 @@ import hr.java.production.model.Item;
 
 import java.util.Comparator;
 
+/**
+ * The type Volume comparator.
+ */
 public class VolumeComparator implements Comparator<Item> {
     private boolean ascending = Boolean.TRUE;
 
     /**
-     * Instantiates a new Production sorter.
+     * Instantiates a new Volume comparator.
      *
      * @param ascending the ascending
      */
@@ -16,6 +19,9 @@ public class VolumeComparator implements Comparator<Item> {
         this.ascending = ascending;
     }
 
+    /**
+     * Instantiates a new Volume comparator.
+     */
     public VolumeComparator() {
     }
 

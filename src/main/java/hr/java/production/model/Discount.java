@@ -9,6 +9,11 @@ public record Discount() {
      */
     static double discountAmount;
 
+    /**
+     * Gets discount amount.
+     *
+     * @return the discount amount
+     */
     public double getDiscountAmount() {
         return discountAmount;
     }
