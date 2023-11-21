@@ -22,8 +22,8 @@ public class Milk extends Item implements Edible {
      * @param sellingPrice   the selling price
      * @param weight         the weight
      */
-    public Milk(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Integer weight,Discount discount) {
-        super(id ,name, category, width, height, length, productionCost, sellingPrice,discount);
+    public Milk(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Integer weight, Discount discount) {
+        super(id, name, category, width, height, length, productionCost, sellingPrice, discount);
         this.weight = weight;
     }
 

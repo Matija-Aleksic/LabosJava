@@ -3,16 +3,17 @@ package hr.java.production.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * The type Category.
  */
-public class Category extends NamedEntity {
+public class Category extends NamedEntity implements Serializable {
 
+    private static final ArrayList<Category> categories = new ArrayList<>();
     private String description;
-    private static ArrayList<Category> categories = new ArrayList<>();
 
     /**
      * Instantiates a new Category.
@@ -28,33 +29,6 @@ public class Category extends NamedEntity {
 
     public Category(Long id, String name, String description) {
         super(id, name);
-        this.description = description;
-    }
-
-    public String getName() {
-        return super.getName();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets description.
-     *
-     * @param description the description
-     */
-    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -77,13 +51,39 @@ public class Category extends NamedEntity {
         return categories;
     }
 
-    public static Category findCategoryByName(String categoryName){
+    public static Category findCategoryByName(String categoryName) {
         for (Category category : categories) {
             if (category.getName().equals(categoryName)) {
                 return category;
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return super.getName();
+    }
+
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets description.
+     *
+     * @param description the description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

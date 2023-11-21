@@ -41,7 +41,7 @@ public final class Laptop extends Item implements Technical {
      * @param discount1
      */
     public Laptop(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, int warrantyDurationInMonths, Discount discount1) {
-        super(id,name, category, width, height, length, productionCost, sellingPrice, discount);
+        super(id, name, category, width, height, length, productionCost, sellingPrice, discount);
         this.warrantyDurationInMonths = warrantyDurationInMonths;
         this.discount = discount1;
     }

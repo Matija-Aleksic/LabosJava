@@ -3,6 +3,7 @@ package hr.java.production.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -12,8 +13,9 @@ import static hr.java.production.model.Category.findCategoryByName;
 /**
  * The type Item.
  */
-public class Item extends NamedEntity {
+public class Item extends NamedEntity implements Serializable {
 
+    private static final ArrayList<Item> items = new ArrayList<>();
     private Category category;
     private BigDecimal width;
     private BigDecimal height;
@@ -21,7 +23,6 @@ public class Item extends NamedEntity {
     private BigDecimal productionCost;
     private BigDecimal sellingPrice;
     private Discount discount;
-    private static ArrayList<Item> items = new ArrayList<>();
 
 
     /**
@@ -37,7 +38,7 @@ public class Item extends NamedEntity {
      * @param discount       the discount
      */
     public Item(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount) {
-        super(id,name);
+        super(id, name);
         this.category = category;
         this.width = width;
         this.height = height;
@@ -47,6 +48,39 @@ public class Item extends NamedEntity {
         this.discount = discount;
     }
 
+    public static ArrayList<Item> loadItemsFromFile(String fileName) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Long id = Long.parseLong(line.trim());
+                String itemName = reader.readLine().trim();
+                String categoryName = reader.readLine().trim();
+
+                // Pronalaženje kategorije po imenu
+                Category category = findCategoryByName(categoryName);
+
+                BigDecimal width = new BigDecimal(reader.readLine().trim());
+                BigDecimal height = new BigDecimal(reader.readLine().trim());
+                BigDecimal length = new BigDecimal(reader.readLine().trim());
+                BigDecimal productionCost = new BigDecimal(reader.readLine().trim());
+                BigDecimal sellingPrice = new BigDecimal(reader.readLine().trim());
+
+                String discountValue = reader.readLine().trim();
+                Discount discount = new Discount(Double.parseDouble(discountValue));
+
+                items.add(new Item(id, itemName, category, width, height, length, productionCost, sellingPrice, discount));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return items;
+    }
+
+    public static Item findItemById(Long itemId) {
+        return items.get(Math.toIntExact(itemId - 1));
+    }
 
     /**
      * Gets discount.
@@ -190,16 +224,6 @@ public class Item extends NamedEntity {
     }
 
     /**
-     * Gets selling pricein double.
-     *
-     * @return the selling pricein double
-     */
-    public double getSellingPriceinDouble() {
-        double price = sellingPrice.doubleValue();
-        return price;
-    }
-
-    /**
      * Sets selling price.
      *
      * @param sellingPrice the selling price
@@ -208,40 +232,15 @@ public class Item extends NamedEntity {
         this.sellingPrice = sellingPrice;
     }
 
-    public static ArrayList<Item> loadItemsFromFile(String fileName) {
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Long id = Long.parseLong(line.trim());
-                String itemName = reader.readLine().trim();
-                String categoryName = reader.readLine().trim();
-
-                // Pronalaženje kategorije po imenu
-                Category category = findCategoryByName(categoryName);
-
-                BigDecimal width = new BigDecimal(reader.readLine().trim());
-                BigDecimal height = new BigDecimal(reader.readLine().trim());
-                BigDecimal length = new BigDecimal(reader.readLine().trim());
-                BigDecimal productionCost = new BigDecimal(reader.readLine().trim());
-                BigDecimal sellingPrice = new BigDecimal(reader.readLine().trim());
-
-                String discountValue = reader.readLine().trim();
-                Discount discount = new Discount(Double.parseDouble(discountValue));
-
-                items.add(new Item(id, itemName,category, width, height, length, productionCost, sellingPrice, discount));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return items;
+    /**
+     * Gets selling pricein double.
+     *
+     * @return the selling pricein double
+     */
+    public double getSellingPriceinDouble() {
+        double price = sellingPrice.doubleValue();
+        return price;
     }
-
-    public static Item findItemById(Long itemId) {
-        return items.get(Math.toIntExact(itemId-1));
-    }
-
 
     @Override
     public boolean equals(Object o) {
