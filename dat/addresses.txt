@@ -1,0 +1,20 @@
+1
+Ulica Sunčana
+123
+Zagreb
+2
+Dravska Avenija
+456
+Osijek
+3
+Jadranska Ulica
+789
+Split
+4
+Velebitski Put
+101
+Rijeka
+5
+Slavonski Trg
+202
+Đakovo

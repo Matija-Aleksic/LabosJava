@@ -16,26 +16,6 @@ public class Item extends NamedEntity {
     private BigDecimal sellingPrice;
     private Discount discount;
 
-    /**
-     * Instantiates a new Item.
-     *
-     * @param name           the name
-     * @param category       the category
-     * @param width          the width
-     * @param height         the height
-     * @param length         the length
-     * @param productionCost the production cost
-     * @param sellingPrice   the selling price
-     */
-    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice) {
-        super(name);
-        this.category = category;
-        this.width = width;
-        this.height = height;
-        this.length = length;
-        this.productionCost = productionCost;
-        this.sellingPrice = sellingPrice;
-    }
 
     /**
      * Instantiates a new Item.
@@ -59,6 +39,7 @@ public class Item extends NamedEntity {
         this.sellingPrice = sellingPrice;
         this.discount = discount;
     }
+
 
     /**
      * Gets discount.
@@ -200,6 +181,12 @@ public class Item extends NamedEntity {
             return sellingPrice;
         }
     }
+
+    /**
+     * Gets selling pricein double.
+     *
+     * @return the selling pricein double
+     */
     public double getSellingPriceinDouble() {
         double price = sellingPrice.doubleValue();
         return price;

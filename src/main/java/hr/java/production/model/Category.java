@@ -14,10 +14,6 @@ public class Category extends NamedEntity {
      *
      * @param name the name
      */
-    public Category(String name) {
-        super(name);
-    }
-
     /**
      * Instantiates a new Category.
      *
@@ -26,6 +22,11 @@ public class Category extends NamedEntity {
      */
     public Category(String name, String description) {
         super(name);
+        this.description = description;
+    }
+
+    public Category(Long id, String name, String description) {
+        super(id, name);
         this.description = description;
     }
 

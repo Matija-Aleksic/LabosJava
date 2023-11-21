@@ -12,15 +12,8 @@ public class Factory extends NamedEntity {
     private Item[] items;
 
 
-    /**
-     * Instantiates a new Factory.
-     *
-     * @param name    the name
-     * @param address the address
-     * @param items   the items
-     */
-    public Factory(String name, Address address, Item[] items) {
-        super(name);
+    public Factory(Long id, String name, Address address, Item[] items) {
+        super(id, name);
         this.address = address;
         this.items = items;
     }

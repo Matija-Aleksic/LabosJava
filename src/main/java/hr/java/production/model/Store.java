@@ -10,15 +10,9 @@ public class Store extends NamedEntity {
     private String webAddress;
     private ArrayList<Item> items;
 
-    /**
-     * Instantiates a new Store.
-     *
-     * @param name       the name
-     * @param webAddress the web address
-     * @param items      the items
-     */
-    public Store(String name, String webAddress, ArrayList<Item> items) {
-        super(name);
+
+    public Store(Long id, String name, String webAddress, ArrayList<Item> items) {
+        super(id, name);
         this.webAddress = webAddress;
         this.items = items;
     }
