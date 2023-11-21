@@ -5,7 +5,6 @@ import hr.java.production.model.Store;
 import hr.java.production.model.Technical;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The type Technical store.
@@ -15,6 +14,7 @@ import java.util.List;
 public class TechnicalStore<T extends Technical> extends Store {
 
     private final ArrayList<T> technicalItems;
+    private final Long id;
 
     /**
      * Instantiates a new Technical store.
@@ -22,9 +22,11 @@ public class TechnicalStore<T extends Technical> extends Store {
      * @param name       the name
      * @param webAddress the web address
      * @param items      the items
+     * @param id
      */
-    public TechnicalStore(String name, String webAddress, ArrayList<Item> items) {
-        super(name,webAddress,items);
+    public TechnicalStore(String name, String webAddress, ArrayList<Item> items, Long id) {
+        super(id,name,webAddress,items);
+        this.id = id;
         this.technicalItems = new ArrayList<>();
     }
 

@@ -1,20 +1,20 @@
 1
 Ulica Sunčana
 123
-Zagreb
+ZAGREB
 2
 Dravska Avenija
 456
-Osijek
+OSIJEK
 3
 Jadranska Ulica
 789
-Split
+SPLIT
 4
 Velebitski Put
 101
-Rijeka
+RIJEKA
 5
 Slavonski Trg
 202
-Đakovo
+RIJEKA

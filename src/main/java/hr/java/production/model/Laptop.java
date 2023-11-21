@@ -8,6 +8,8 @@ import java.util.Objects;
  */
 public final class Laptop extends Item implements Technical {
     private final int warrantyDurationInMonths;
+    private final Discount discount;
+
 
     /**
      * Instantiates a new Laptop.
@@ -20,11 +22,9 @@ public final class Laptop extends Item implements Technical {
      * @param productionCost           the production cost
      * @param sellingPrice             the selling price
      * @param warrantyDurationInMonths the warranty duration in months
+     * @param discount
      */
-    public Laptop(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, int warrantyDurationInMonths) {
-        super(name, category, width, height, length, productionCost, sellingPrice);
-        this.warrantyDurationInMonths = warrantyDurationInMonths;
-    }
+
 
     /**
      * Instantiates a new Laptop.
@@ -38,10 +38,12 @@ public final class Laptop extends Item implements Technical {
      * @param sellingPrice             the selling price
      * @param discount                 the discount
      * @param warrantyDurationInMonths the warranty duration in months
+     * @param discount1
      */
-    public Laptop(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, int warrantyDurationInMonths) {
-        super(name, category, width, height, length, productionCost, sellingPrice, discount);
+    public Laptop(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, int warrantyDurationInMonths, Discount discount1) {
+        super(id,name, category, width, height, length, productionCost, sellingPrice, discount);
         this.warrantyDurationInMonths = warrantyDurationInMonths;
+        this.discount = discount1;
     }
 
     @Override

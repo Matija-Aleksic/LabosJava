@@ -1,5 +1,6 @@
 1
 Češalj
+Random
 25.5
 15.2
 30.8
@@ -8,6 +9,7 @@
 10
 2
 Jakna
+Random
 40.0
 20.5
 50.0
@@ -16,6 +18,7 @@ Jakna
 2
 3
 Kuhalo za vodu
+Random
 15.0
 10.0
 20.0
@@ -24,6 +27,7 @@ Kuhalo za vodu
 1
 4
 Sat
+Random
 12.5
 8.0
 15.5
@@ -32,6 +36,7 @@ Sat
 0
 5
 Zvučnik
+Random
 30.0
 18.0
 40.0

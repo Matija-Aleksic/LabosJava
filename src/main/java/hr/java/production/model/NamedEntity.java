@@ -16,9 +16,6 @@ public abstract class NamedEntity {
      *
      * @param name the name
      */
-    public NamedEntity(String name) {
-        this.name = name;
-    }
 
     public NamedEntity(Long id, String name) {
         this.id = id;

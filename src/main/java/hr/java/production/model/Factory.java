@@ -1,7 +1,13 @@
 package hr.java.production.model;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+
+import static hr.java.production.model.Item.findItemById;
 
 /**
  * The type Factory.
@@ -60,6 +66,45 @@ public class Factory extends NamedEntity {
      */
     public void setItems(Item[] items) {
         this.items = items;
+    }
+
+
+    public static ArrayList<Factory> loadFactoriesFromFile(String fileName) {
+        ArrayList<Factory> factories = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Long id = Long.parseLong(line.trim());
+                String name = reader.readLine().trim();
+
+
+                Long addressId = Long.parseLong(reader.readLine().trim());
+                Address address = findAddressById(addressId);
+
+
+                String[] itemIds = reader.readLine().split(",");
+                ArrayList<Item> itemList = new ArrayList<>();
+                for (String itemId : itemIds) {
+                    Long itemIdLong = Long.parseLong(itemId.trim());
+                    Item item = findItemById(itemIdLong);
+                    if (item != null) {
+                        itemList.add(item);
+                    }
+                }
+
+                factories.add(new Factory(id, name, address, itemList.toArray(new Item[0])));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return factories;
+    }
+    //TODO dodat logiku kad se naprave
+
+    private static Address findAddressById(Long addressId) {
+        return null;
     }
 
     @Override

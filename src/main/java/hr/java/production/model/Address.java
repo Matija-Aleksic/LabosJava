@@ -2,6 +2,10 @@ package hr.java.production.model;
 
 import hr.java.production.Enum.City;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -12,6 +16,8 @@ public class Address {
     private final String street;
     private final String houseNumber;
     private final City city; // Promijenjena varijabla city da koristi enum City
+    private final Long id;
+    private static ArrayList<Address> addresses = new ArrayList<>();
 
     /**
      * Konstruktor za Address s Builder obrascem
@@ -19,6 +25,7 @@ public class Address {
      * @param builder graditelj
      */
     private Address(Builder builder) {
+        this.id = builder.id;
         this.street = builder.street;
         this.houseNumber = builder.houseNumber;
         this.city = builder.city; // Postavljeno korištenje enuma za grad
@@ -50,14 +57,19 @@ public class Address {
     public City getCity() {
         return city;
     }
+    public Long getId(){
+        return id;
+    }
 
     /**
      * The type Builder.
      */
     public static class Builder {
+
+        private Long id;
         private String street;
         private String houseNumber;
-        private City city; // Promijenjena varijabla city u enum City
+        private City city;
 
         /**
          * Sets street.
@@ -91,6 +103,10 @@ public class Address {
             this.city = city;
             return this;
         }
+        public Builder setId(Long id1) {
+            this.id = id1;
+            return this;
+        }
 
         /**
          * Build address.
@@ -99,6 +115,39 @@ public class Address {
          */
         public Address build() {
             return new Address(this);
+        }
+
+        public static ArrayList<Address> loadAddressesFromFile(String fileName) {
+            ArrayList<Address> addresses = new ArrayList<>();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    Long id = Long.parseLong(line.trim());
+                    String street = reader.readLine().trim();
+                    String houseNumber = reader.readLine().trim();
+                    City city = City.valueOf(reader.readLine().trim());
+
+                    addresses.add(new Address.Builder()
+                            .setStreet(street)
+                            .setHouseNumber(houseNumber)
+                            .setCity(city)
+                            .build());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return addresses;
+        }
+
+        public static Address findAddressById(Long id) {
+            for (Address address : addresses) {
+                if (address.getId().equals(id)) {
+                    return address;
+                }
+            }
+            return null;
         }
 
         @Override

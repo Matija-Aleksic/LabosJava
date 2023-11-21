@@ -1,13 +1,6 @@
 package hr.java.production.model;
 
-/**
- * The type Discount.
- */
-public record Discount() {
-    /**
-     * The constant discountAmount.
-     */
-    static double discountAmount;
+public record Discount(double discountAmount) {
 
     /**
      * Gets discount amount.
@@ -17,6 +10,4 @@ public record Discount() {
     public double getDiscountAmount() {
         return discountAmount;
     }
-
-
 }

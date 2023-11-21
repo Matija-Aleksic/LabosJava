@@ -15,6 +15,7 @@ import java.util.List;
 public class FoodStore<T extends Edible> extends Store {
 
     private final List<T> edibleItems;
+    private final Long id;
 
     /**
      * Instantiates a new Food store.
@@ -22,9 +23,12 @@ public class FoodStore<T extends Edible> extends Store {
      * @param name       the name
      * @param webAddress the web address
      * @param items      the items
+     * @param id
+
      */
-    public FoodStore(String name, String webAddress, ArrayList<Item> items) {
-        super(name,webAddress,items);
+    public FoodStore(String name, String webAddress, ArrayList<Item> items, Long id) {
+        super(id,name,webAddress,items);
+        this.id = id;
         this.edibleItems = new ArrayList<>();
     }
 

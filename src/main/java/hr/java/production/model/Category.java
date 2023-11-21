@@ -1,5 +1,9 @@
 package hr.java.production.model;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -8,6 +12,7 @@ import java.util.Objects;
 public class Category extends NamedEntity {
 
     private String description;
+    private static ArrayList<Category> categories = new ArrayList<>();
 
     /**
      * Instantiates a new Category.
@@ -20,10 +25,6 @@ public class Category extends NamedEntity {
      * @param name        the name
      * @param description the description
      */
-    public Category(String name, String description) {
-        super(name);
-        this.description = description;
-    }
 
     public Category(Long id, String name, String description) {
         super(id, name);
@@ -55,6 +56,34 @@ public class Category extends NamedEntity {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static ArrayList<Category> loadCategoriesFromFile(String fileName) {
+        ArrayList<Category> categories = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Long id = Long.parseLong(line.trim()); // Prvi redak je identifikator kategorije
+                String name = reader.readLine().trim(); // Drugi redak je ime kategorije
+                String description = reader.readLine().trim(); // Treći redak je opis kategorije
+
+                categories.add(new Category(id, name, description));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
+    }
+
+    public static Category findCategoryByName(String categoryName){
+        for (Category category : categories) {
+            if (category.getName().equals(categoryName)) {
+                return category;
+            }
+        }
+        return null;
     }
 
     @Override
