@@ -93,8 +93,10 @@ public class Factory extends NamedEntity implements Serializable {
      *
      * @return the item [ ]
      */
-    public Item[] getItems() {
-        return items;
+    public ArrayList<Item> getItems() {
+        ArrayList<Item> items1 = new ArrayList<>();
+
+        return items1;
     }
     //TODO dodat logiku kad se naprave
 
@@ -107,18 +109,18 @@ public class Factory extends NamedEntity implements Serializable {
         this.items = items;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Factory factory)) return false;
-        if (!super.equals(o)) return false;
-        return Objects.equals(getAddress(), factory.getAddress()) && Arrays.equals(getItems(), factory.getItems());
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof Factory factory)) return false;
+//        if (!super.equals(o)) return false;
+//        return Objects.equals(getAddress(), factory.getAddress()) && Arrays.equals(getItems(), factory.getItems());
+//    }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(super.hashCode(), getAddress());
-        result = 31 * result + Arrays.hashCode(getItems());
-        return result;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = Objects.hash(super.hashCode(), getAddress());
+//        result = 31 * result + Arrays.hashCode(getItems());
+//        return result;
+//    }
 }

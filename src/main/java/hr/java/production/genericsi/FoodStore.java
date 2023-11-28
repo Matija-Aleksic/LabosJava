@@ -24,10 +24,9 @@ public class FoodStore<T extends Edible> extends Store {
      * @param webAddress the web address
      * @param items      the items
      * @param id
-
      */
     public FoodStore(String name, String webAddress, ArrayList<Item> items, Long id) {
-        super(id,name,webAddress,items);
+        super(id, name, webAddress, items);
         this.id = id;
         this.edibleItems = new ArrayList<>();
     }

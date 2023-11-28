@@ -1,20 +1,27 @@
 package hr.java.production.main;
 
+import ch.qos.logback.core.net.ObjectWriter;
 import hr.java.production.genericsi.FoodStore;
 import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
-import hr.java.production.sort.ProductionSorter;
 import hr.java.production.sort.VolumeComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static hr.java.production.model.Address.Builder.loadAddressesFromFile;
 import static hr.java.production.model.Category.loadCategoriesFromFile;
@@ -35,7 +42,7 @@ public class Main {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         logger.info("pokrenut main");
         Scanner scanner = new Scanner(System.in);
 
@@ -52,6 +59,47 @@ public class Main {
         ArrayList<Item> tehnika = getTehnical(items);
 
         ArrayList<Item> hrana = getEdible(items);
+
+
+        System.out.println("unesi pah do foldera");
+        String put = scanner.nextLine();
+        Path p = Paths.get(put);
+        List<Path> paths = findByFileExtension(p, ".bindat");
+        paths.forEach(x -> System.out.println(x));
+
+
+        ArrayList<Item> items1 = new ArrayList<>();
+        for (Path path : paths) {
+
+            ObjectInputStream objectInputStream = new ObjectInputStream((InputStream) paths);
+            Object obj = objectInputStream.readObject();
+            if (obj instanceof Item) {
+                items1.add((Item) obj);
+                int byteRead = -1;
+
+                while ((byteRead = objectInputStream.read()) != -1) {
+                    ObjectWriter outputStream = null;
+                    outputStream.write(byteRead);
+                }
+            } else {
+                System.out.println("novi unos");
+            }
+        }
+
+        for (Factory factory : factories){
+            for (int i =0 ;i< items1.size(); i++){
+                ArrayList<Item> tempItems = factory.getItems();
+                if (factory.getItems().contains(items1.get(i))){
+                    tempItems.remove(items1.get(i));
+                }
+                FileWriter fileWriter = new FileWriter("factories.txt");
+                fileWriter.write(factory.getName());
+                fileWriter.write(factory.getAddress().toString());
+                fileWriter.write(tempItems.toString());
+                //...
+            }
+        }
+
 
 
         Factory largestVolumeFactory = null;
@@ -244,6 +292,24 @@ public class Main {
 
     }
 
+    public static List<Path> findByFileExtension(Path path, String fileExtension)
+            throws IOException {
+
+        if (!Files.isDirectory(path)) {
+            throw new IllegalArgumentException("Path must be a directory!");
+        }
+
+        List<Path> result;
+        try (Stream<Path> walk = Files.walk(path)) {
+            result = walk
+                    .filter(Files::isRegularFile)   // is a file
+                    .filter(p -> p.getFileName().toString().endsWith(fileExtension))
+                    .collect(Collectors.toList());
+        }
+        return result;
+
+    }
+
 
     private static Optional<Item> findItemWithDiscountGreaterThanZero(List<? extends Item> items) {
         return (Optional<Item>) items.stream().filter(item -> item.getDiscount().getDiscountAmount() > 0).findFirst();
@@ -315,9 +381,4 @@ public class Main {
         return Arrays.stream(stores).mapToDouble(Store::getNumberOfItems).average().orElse(0.0);
     }
 
-
 }
-
-
-
-

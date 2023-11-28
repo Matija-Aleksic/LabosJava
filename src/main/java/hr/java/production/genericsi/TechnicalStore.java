@@ -25,7 +25,7 @@ public class TechnicalStore<T extends Technical> extends Store {
      * @param id
      */
     public TechnicalStore(String name, String webAddress, ArrayList<Item> items, Long id) {
-        super(id,name,webAddress,items);
+        super(id, name, webAddress, items);
         this.id = id;
         this.technicalItems = new ArrayList<>();
     }

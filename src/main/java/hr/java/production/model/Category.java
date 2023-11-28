@@ -18,11 +18,6 @@ public class Category extends NamedEntity implements Serializable {
     /**
      * Instantiates a new Category.
      *
-     * @param name the name
-     */
-    /**
-     * Instantiates a new Category.
-     *
      * @param name        the name
      * @param description the description
      */
