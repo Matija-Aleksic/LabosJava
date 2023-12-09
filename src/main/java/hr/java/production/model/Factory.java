@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static hr.java.production.model.Address.Builder.findAddressById;
 import static hr.java.production.model.Item.findItemById;
 
 /**
  * The type Factory.
  */
 public class Factory extends NamedEntity implements Serializable {
+
 
     private Address address;
     private Item[] items;
@@ -56,10 +58,6 @@ public class Factory extends NamedEntity implements Serializable {
         }
 
         return factories;
-    }
-
-    private static Address findAddressById(Long addressId) {
-        return null;
     }
 
     public String getName() {

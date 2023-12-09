@@ -33,7 +33,6 @@ public class Category extends NamedEntity implements Serializable {
     }
 
     public static ArrayList<Category> loadCategoriesFromFile(String fileName) {
-        ArrayList<Category> categories = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -53,6 +52,7 @@ public class Category extends NamedEntity implements Serializable {
 
     public static Category findCategoryByName(String categoryName) {
         for (Category category : categories) {
+            System.out.println(categoryName);
             if (category.getName().equals(categoryName)) {
                 return category;
             }
