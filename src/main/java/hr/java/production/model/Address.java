@@ -74,7 +74,6 @@ public class Address implements Serializable {
         private City city;
 
         public static ArrayList<Address> loadAddressesFromFile(String fileName) {
-            ArrayList<Address> addresses = new ArrayList<>();
 
             try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String line;
@@ -85,6 +84,7 @@ public class Address implements Serializable {
                     City city = City.valueOf(reader.readLine().trim());
 
                     addresses.add(new Address.Builder()
+                            .setId(id)
                             .setStreet(street)
                             .setHouseNumber(houseNumber)
                             .setCity(city)

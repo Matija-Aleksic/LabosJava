@@ -10,4 +10,8 @@ public record Discount(double discountAmount) {
     public double getDiscountAmount() {
         return discountAmount;
     }
+
+    public String getDiscountAmountString() {
+        return String.valueOf(discountAmount);
+    }
 }
