@@ -82,6 +82,10 @@
                 <Insets right="10.0" />
             </GridPane.margin>
         </Label>
-      <Button mnemonicParsing="false" onAction="#storeSearch" text="Search" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+      <Button mnemonicParsing="false" onAction="#storeSearch" text="Search" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+         <GridPane.margin>
+            <Insets right="100.0" />
+         </GridPane.margin></Button>
+      <Button mnemonicParsing="false" onAction="#addStoreToFile" text="add " GridPane.columnIndex="1" GridPane.rowIndex="5" />
     </GridPane>
 </VBox>

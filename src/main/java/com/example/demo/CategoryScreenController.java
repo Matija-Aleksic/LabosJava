@@ -11,6 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +36,11 @@ public class CategoryScreenController {
     private TableColumn<Category, String> categoryNameTableColumn;
     @FXML
     private TableColumn<Category, String> categoryDescriptionTableColumn;
+    List<Category> categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
 
     public void initialize() {
+
+
         categoryIdTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> param) {
                 return new ReadOnlyStringWrapper(param.getValue().getId().toString());
@@ -55,16 +61,39 @@ public class CategoryScreenController {
     }
 
     public void categorySearch() {
-        List<Category> categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
-
+        categoryList.clear();
+        categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
         String categoryId = categoryIdTextField.getText();
         String categoryName = categoryNameTextField.getText();
         String categoryDescription = categoryDescriptionTextField.getText();
 
         List<Category> filteredCategories = categoryList.stream().filter(c -> c.getId().toString().contains(categoryId) && c.getName().contains(categoryName) && c.getDescription().contains(categoryDescription)).collect(Collectors.toList());
-
+        categoryTableView.getItems().clear();
         ObservableList<Category> observableCategoryList = FXCollections.observableList(filteredCategories);
 
         categoryTableView.setItems(observableCategoryList);
+    }
+
+    public void addCategory() {
+        Long categoryId = (long) (categoryList.size()+1);
+        String categoryName = categoryNameTextField.getText().trim();
+        String categoryDescription = categoryDescriptionTextField.getText().trim();
+
+        if (categoryName.isEmpty() || categoryDescription.isEmpty()) {
+            System.out.println("nes fali");
+            return;
+        }
+
+        Category newCategory = new Category((categoryId), categoryName, categoryDescription);
+        categoryList.add(newCategory);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("E:\\Projects\\javaLabos\\dat\\categories.txt", true))) {
+            writer.write("");
+            writer.write(newCategory.getId() + "\n");
+            writer.write(newCategory.getName() + "\n");
+            writer.write(newCategory.getDescription() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

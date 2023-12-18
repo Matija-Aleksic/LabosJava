@@ -41,6 +41,7 @@ public class MenuBarController {
             HelloApplication.getMainStage().setScene(scene);
             HelloApplication.getMainStage().show();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
     }

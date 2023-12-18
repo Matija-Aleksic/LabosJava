@@ -14,7 +14,7 @@ import java.util.Objects;
  * The type Address.
  */
 public class Address implements Serializable {
-    private static final ArrayList<Address> addresses = new ArrayList<>();
+    public static final ArrayList<Address> addresses = new ArrayList<>();
     private final String street;
     private final String houseNumber;
     private final City city; // Promijenjena varijabla city da koristi enum City
@@ -25,11 +25,18 @@ public class Address implements Serializable {
      *
      * @param builder graditelj
      */
-    private Address(Builder builder) {
+    public Address(Builder builder) {
         this.id = builder.id;
         this.street = builder.street;
         this.houseNumber = builder.houseNumber;
         this.city = builder.city; // Postavljeno korištenje enuma za grad
+    }
+
+    public Address(String street, String houseNumber, City city, Long id) {
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.city = city;
+        this.id = id;
     }
 
     /**
