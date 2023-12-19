@@ -20,23 +20,21 @@ import java.util.stream.Collectors;
 import static hr.java.production.model.Category.loadCategoriesFromFile;
 
 public class CategoryScreenController {
+    List<Category> categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
     @FXML
     private TextField categoryIdTextField;
     @FXML
     private TextField categoryNameTextField;
     @FXML
     private TextField categoryDescriptionTextField;
-
     @FXML
     private TableView<Category> categoryTableView;
-
     @FXML
     private TableColumn<Category, String> categoryIdTableColumn;
     @FXML
     private TableColumn<Category, String> categoryNameTableColumn;
     @FXML
     private TableColumn<Category, String> categoryDescriptionTableColumn;
-    List<Category> categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
 
     public void initialize() {
 
@@ -75,7 +73,7 @@ public class CategoryScreenController {
     }
 
     public void addCategory() {
-        Long categoryId = (long) (categoryList.size()+1);
+        Long categoryId = (long) (categoryList.size() + 1);
         String categoryName = categoryNameTextField.getText().trim();
         String categoryDescription = categoryDescriptionTextField.getText().trim();
 
@@ -88,7 +86,7 @@ public class CategoryScreenController {
         categoryList.add(newCategory);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("E:\\Projects\\javaLabos\\dat\\categories.txt", true))) {
-            writer.write("");
+
             writer.write(newCategory.getId() + "\n");
             writer.write(newCategory.getName() + "\n");
             writer.write(newCategory.getDescription() + "\n");

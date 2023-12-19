@@ -57,7 +57,6 @@ public class Item extends NamedEntity implements Serializable {
                 String itemName = reader.readLine().trim();
                 String categoryName = reader.readLine().trim();
 
-                // Pronalaženje kategorije po imenu
                 Category category = findCategoryByName(categoryName);
 
                 BigDecimal width = new BigDecimal(reader.readLine().trim());
