@@ -90,12 +90,7 @@ public class Address implements Serializable {
                     String houseNumber = reader.readLine().trim();
                     City city = City.valueOf(reader.readLine().trim());
 
-                    addresses.add(new Address.Builder()
-                            .setId(id)
-                            .setStreet(street)
-                            .setHouseNumber(houseNumber)
-                            .setCity(city)
-                            .build());
+                    addresses.add(new Address.Builder().setId(id).setStreet(street).setHouseNumber(houseNumber).setCity(city).build());
                 }
             } catch (IOException e) {
                 e.printStackTrace();

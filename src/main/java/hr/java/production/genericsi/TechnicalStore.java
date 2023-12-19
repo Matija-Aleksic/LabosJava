@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class TechnicalStore<T extends Technical> extends Store {
 
     private final ArrayList<T> technicalItems;
-    private final Long id;
 
     /**
      * Instantiates a new Technical store.
@@ -26,7 +25,6 @@ public class TechnicalStore<T extends Technical> extends Store {
      */
     public TechnicalStore(String name, String webAddress, ArrayList<Item> items, Long id) {
         super(id,name,webAddress,items);
-        this.id = id;
         this.technicalItems = new ArrayList<>();
     }
 

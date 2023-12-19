@@ -6,9 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class HelloApplication extends Application {
-
     public static Stage mainStage;
 
     public static Stage getMainStage() {
@@ -27,5 +27,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Search categories");
         stage.setScene(scene);
         stage.show();
+
     }
 }

@@ -37,9 +37,9 @@ public class Category extends NamedEntity implements Serializable {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Long id = Long.parseLong(line.trim()); // Prvi redak je identifikator kategorije
-                String name = reader.readLine().trim(); // Drugi redak je ime kategorije
-                String description = reader.readLine().trim(); // Treći redak je opis kategorije
+                Long id = Long.parseLong(line.trim());
+                String name = reader.readLine().trim();
+                String description = reader.readLine().trim();
 
                 categories.add(new Category(id, name, description));
             }
@@ -52,7 +52,6 @@ public class Category extends NamedEntity implements Serializable {
 
     public static Category findCategoryByName(String categoryName) {
         for (Category category : categories) {
-            System.out.println(categoryName);
             if (category.getName().equals(categoryName)) {
                 return category;
             }

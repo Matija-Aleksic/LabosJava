@@ -20,9 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hr.java.production.model.Store.loadStoresFromFile;
 import static hr.java.production.model.Item.loadItemsFromFile;
+import static hr.java.production.model.Store.loadStoresFromFile;
 
+/**
+ * The type Store screen controller.
+ */
 public class StoreScreenController {
 
     @FXML
@@ -46,6 +49,9 @@ public class StoreScreenController {
     @FXML
     private TableColumn<Store, String> storeItemsTableColumn;
 
+    /**
+     * Initialize.
+     */
     public void initialize() {
         storeIdTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Store, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Store, String> param) {
@@ -69,6 +75,9 @@ public class StoreScreenController {
         });
     }
 
+    /**
+     * Store search.
+     */
     public void storeSearch() {
         ArrayList<Item> items = loadItemsFromFile("dat/items.txt");
         List<Store> storeList = loadStoresFromFile("dat/stores.txt");
@@ -87,6 +96,9 @@ public class StoreScreenController {
     }
 
 
+    /**
+     * Add store to file.
+     */
     public void addStoreToFile() {
         String storeId = storeIdTextField.getText().trim();
         String storeName = storeNameTextField.getText().trim();
@@ -107,13 +119,11 @@ public class StoreScreenController {
             e.printStackTrace();
         }
 
-        // Optionally, you can clear the text fields after adding a new store
         storeIdTextField.clear();
         storeNameTextField.clear();
         storeWebAddressTextField.clear();
         storeItemsTextField.clear();
 
-        // Optionally, refresh the table view with the updated data
         storeSearch();
     }
 

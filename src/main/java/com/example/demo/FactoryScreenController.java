@@ -20,13 +20,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hr.java.production.model.Address.Builder.loadAddressesFromFile;
-import static hr.java.production.model.Address.addresses;
 import static hr.java.production.model.Factory.loadFactoriesFromFile;
-import static hr.java.production.model.Item.findItemById;
 import static hr.java.production.model.Item.loadItemsFromFile;
 
 public class FactoryScreenController {
@@ -52,10 +49,10 @@ public class FactoryScreenController {
     @FXML
     private TableColumn<Factory, String> factoryItemsTableColumn;
 
-    private ArrayList<Factory> factoryList ;
+    private ArrayList<Factory> factoryList;
 
     public void initialize() {
-        ArrayList<Address> addresses= loadAddressesFromFile("dat/addresses.txt");
+        ArrayList<Address> addresses = loadAddressesFromFile("dat/addresses.txt");
         loadItemsFromFile("dat/items.txt");
         factoryList = loadFactoriesFromFile("dat/factories.txt");
         factorySearch();
@@ -108,33 +105,29 @@ public class FactoryScreenController {
                 City.ZAGREB,
                 10L);
 
-        if (factoryId.isEmpty() || factoryName.isEmpty() || tempfactoryAddress.isEmpty() ) {
+        if (factoryId.isEmpty() || factoryName.isEmpty() || tempfactoryAddress.isEmpty()) {
             System.out.println("fali unos");
             return;
         }
         Item[] items = loadItemsFromFile("dat/items.txt").toArray(new Item[0]);
 
-        // Create a new Factory object
         Factory newFactory = new Factory(Long.parseLong(factoryId), factoryName, factoryAddress, items);
 
-        // Append the new factory to the "factories.txt" file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("dat/factories.txt", true))) {
-            writer.write( "\n"+ newFactory.getId() + "\n");
+            writer.write("\n" + newFactory.getId() + "\n");
             writer.write(newFactory.getName() + "\n");
             writer.write(4 + "\n");
             writer.write(factoryItems);
         } catch (IOException e) {
-            // Handle the exception (e.g., display an error message)
             e.printStackTrace();
         }
 
-        // Optionally, you can clear the text fields after adding a new factory
+
         factoryIdTextField.clear();
         factoryNameTextField.clear();
         factoryAddressTextField.clear();
         factoryItemsTextField.clear();
 
-        // Optionally, refresh the table view with the updated data
         factorySearch();
     }
 }

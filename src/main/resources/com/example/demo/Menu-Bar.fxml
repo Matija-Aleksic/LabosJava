@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
+<AnchorPane prefHeight="26.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.demo.MenuBarController">
 
-<AnchorPane prefHeight="26.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MenuBarController">
-
-    <MenuBar maxHeight="20.0" maxWidth="600.0" prefHeight="25.0" prefWidth="561.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
-        <menus>
-            <Menu mnemonicParsing="false" text="Category">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showCategoriesScreen" text="Open Window" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Item">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showItemsScreen" text="Open" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Factory">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showFactoryScreen" text="Open" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Store">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showStoreScreen" text="Open" />
-                </items>
-            </Menu>
-        </menus>
+    <MenuBar maxHeight="20.0" maxWidth="600.0" prefHeight="25.0" prefWidth="561.0" GridPane.columnSpan="2"
+             GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+        <Menu mnemonicParsing="false" text="Category">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showCategoriesScreen" text="Open Window"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Item">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showItemsScreen" text="Open"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Factory">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showFactoryScreen" text="Open"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Store">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showStoreScreen" text="Open"/>
+            </items>
+        </Menu>
     </MenuBar>
 
 </AnchorPane>

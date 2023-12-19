@@ -29,16 +29,16 @@ public class Store extends NamedEntity implements Serializable {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Long id = Long.parseLong(line.trim()); // Prvi redak je identifikator dućana
-                String name = reader.readLine().trim(); // Drugi redak je ime dućana
-                String webAddress = reader.readLine().trim(); // Treći redak je web adresa dućana
+                Long id = Long.parseLong(line.trim());
+                String name = reader.readLine().trim();
+                String webAddress = reader.readLine().trim();
 
                 // Čitanje identifikatora artikala
                 String[] itemIds = reader.readLine().split(",");
                 ArrayList<Item> itemList = new ArrayList<>();
                 for (String itemId : itemIds) {
                     Long itemIdLong = Long.parseLong(itemId.trim());
-                    Item item = findItemById(itemIdLong); // Implementirati logiku za pronalazak artikla po ID-u
+                    Item item = findItemById(itemIdLong);
                     if (item != null) {
                         itemList.add(item);
                     }

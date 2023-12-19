@@ -116,9 +116,7 @@ public class ItemScreenController {
         List<Item> filteredItems = new ArrayList<>();
 
 
-        filteredItems = itemList.stream()
-                .filter(c -> c.getId().toString().contains(itemId) && c.getName()
-                        .contains(itemName)).collect(Collectors.toList());
+        filteredItems = itemList.stream().filter(c -> c.getId().toString().contains(itemId) && c.getName().contains(itemName)).collect(Collectors.toList());
         itemTableView.getItems().clear();
 
         ObservableList<Item> observableCategoryList = FXCollections.observableList(filteredItems);
@@ -134,27 +132,13 @@ public class ItemScreenController {
         String itemSellingPrice = itemSellingPriceTextField.getText().trim();
         String itemDiscount = itemDiscountTextField.getText().trim();
 
-        if (itemId.isEmpty() || itemName.isEmpty() || itemCategory == null || itemDimension.isEmpty() ||
-                itemSellingPrice.isEmpty() || itemDiscount.isEmpty()) {
-            // Handle the case where some fields are empty
+        if (itemId.isEmpty() || itemName.isEmpty() || itemCategory == null || itemDimension.isEmpty() || itemSellingPrice.isEmpty() || itemDiscount.isEmpty()) {
             System.out.println("Please fill in all fields.");
             return;
         }
 
-        // Create a new Item object
-        Item newItem = new Item(
-                Long.parseLong(itemId),
-                itemName,
-                Category.findCategoryByName(itemCategory),
-                BigDecimal.valueOf(3),
-                BigDecimal.valueOf(3),
-                BigDecimal.valueOf(3),
-                BigDecimal.valueOf(3),
-                BigDecimal.valueOf(Long.parseLong(itemSellingPrice)),
-                new Discount(Long.valueOf(itemDiscount))
-        );
+        Item newItem = new Item(Long.parseLong(itemId), itemName, Category.findCategoryByName(itemCategory), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(Long.parseLong(itemSellingPrice)), new Discount(Long.valueOf(itemDiscount)));
 
-        // Append the new item to the "dat/items.txt" file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("dat/items.txt", true))) {
             writer.write(newItem.getId() + "\n");
             writer.write(newItem.getName() + "\n");
@@ -162,13 +146,12 @@ public class ItemScreenController {
             writer.write(newItem.getVolume() + "\n");
             writer.write(newItem.getSellingPrice() + "\n");
             writer.write(newItem.getDiscount().getDiscountAmountString() + "\n");
-            writer.newLine(); // Add an empty line to separate items
+            writer.newLine();
         } catch (IOException e) {
-            // Handle the exception (e.g., display an error message)
             e.printStackTrace();
         }
 
-        // Optionally, clear the input fields after adding a new item
+
         itemIdTextField.clear();
         itemNameTextField.clear();
         itemCategoryComboBox.getSelectionModel().clearSelection();
@@ -176,7 +159,6 @@ public class ItemScreenController {
         itemSellingPriceTextField.clear();
         itemDiscountTextField.clear();
 
-        // Optionally, refresh the table view with the updated data
         itemSearch();
     }
 }

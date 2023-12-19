@@ -8,7 +8,6 @@ import java.util.Objects;
  */
 public final class Laptop extends Item implements Technical {
     private final int warrantyDurationInMonths;
-    private final Discount discount;
 
 
     /**
@@ -43,7 +42,6 @@ public final class Laptop extends Item implements Technical {
     public Laptop(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, int warrantyDurationInMonths, Discount discount1) {
         super(id, name, category, width, height, length, productionCost, sellingPrice, discount);
         this.warrantyDurationInMonths = warrantyDurationInMonths;
-        this.discount = discount1;
     }
 
     @Override
