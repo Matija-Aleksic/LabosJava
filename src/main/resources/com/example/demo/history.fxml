@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HistoryController">
+   <children>
+      <TableView fx:id="historyTableView" layoutX="-6.0" prefHeight="402.0" prefWidth="607.0">
+        <columns>
+          <TableColumn fx:id="idColumn" prefWidth="83.20004415512085" text="id" />
+          <TableColumn fx:id="itemIdColumn" prefWidth="110.39995574951172" text="itemId" />
+            <TableColumn fx:id="changeOnColumn" prefWidth="116.79998779296875" text="ChangeOn" />
+            <TableColumn fx:id="oldValueColumn" prefWidth="133.60003662109375" text="OldValue" />
+            <TableColumn fx:id="newValueColumn" prefWidth="164.79995727539062" text="NewValue" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -9,6 +9,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -103,6 +105,18 @@ public class ItemScreenController {
         });
 
 
+    }
+    public void showFactoryScreen() {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("history.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            HelloApplication.getMainStage().setTitle("history");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 
     public void itemSearch() throws SQLException {

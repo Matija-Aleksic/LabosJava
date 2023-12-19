@@ -287,4 +287,23 @@ public class Database {
         return factoryList;
     }
 
+    public ArrayList<ItemHistory> getChanges() throws SQLException {
+        ArrayList<ItemHistory> histories = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+
+            ResultSet resultSets = statement.executeQuery("SELECT * FROM ITEMHISTORY");
+            while (resultSets.next()) {
+                int id = resultSets.getInt("ID");
+                int itemid = resultSets.getInt("ITEMID");
+                String changeon = resultSets.getString("CHANGEON");
+                String oldvale = resultSets.getString("OLDVALUE");
+                String newvalue = resultSets.getString("NEWVALUE");
+                ItemHistory itemHistory = new ItemHistory(id,itemid,changeon,oldvale,newvalue);
+                histories.add(itemHistory);
+            }
+        }
+
+        return histories;
+
+    }
 }
