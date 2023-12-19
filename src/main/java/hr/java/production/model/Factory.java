@@ -1,9 +1,12 @@
 package hr.java.production.model;
 
+import hr.java.production.database.Database;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,6 +28,11 @@ public class Factory extends NamedEntity implements Serializable {
         super(id, name);
         this.address = address;
         this.items = items;
+    }
+
+    public Factory(Long id, String name, Address address) {
+        super(id, name);
+        this.address = address;
     }
 
     public static ArrayList<Factory> loadFactoriesFromFile(String fileName) {
@@ -91,8 +99,17 @@ public class Factory extends NamedEntity implements Serializable {
      *
      * @return the item [ ]
      */
-    public Item[] getItems() {
-        return items;
+    public ArrayList<Item> getItems() {
+        try {
+            Database database = new Database();
+            database.openConnection();
+            ArrayList<Item> databaseItems = (ArrayList<Item>) database.getItemsForFactory(this.getId());
+            return databaseItems;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     //TODO dodat logiku kad se naprave
 
@@ -105,18 +122,9 @@ public class Factory extends NamedEntity implements Serializable {
         this.items = items;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Factory factory)) return false;
-        if (!super.equals(o)) return false;
-        return Objects.equals(getAddress(), factory.getAddress()) && Arrays.equals(getItems(), factory.getItems());
-    }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(super.hashCode(), getAddress());
-        result = 31 * result + Arrays.hashCode(getItems());
-        return result;
+
+    public long getAddressId() {
+        return address.getId();
     }
 }

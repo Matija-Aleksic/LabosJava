@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import hr.java.production.database.Database;
 import hr.java.production.model.Category;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -11,16 +12,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hr.java.production.model.Category.loadCategoriesFromFile;
-
 public class CategoryScreenController {
-    List<Category> categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
+    ArrayList<Category> categoryList = new ArrayList<>();
     @FXML
     private TextField categoryIdTextField;
     @FXML
@@ -58,40 +57,67 @@ public class CategoryScreenController {
 
     }
 
-    public void categorySearch() {
-        categoryList.clear();
-        categoryList = loadCategoriesFromFile("E:\\Projects\\javaLabos\\dat\\categories.txt");
-        String categoryId = categoryIdTextField.getText();
-        String categoryName = categoryNameTextField.getText();
-        String categoryDescription = categoryDescriptionTextField.getText();
+    public ArrayList<Category> categorySearch() {
+        String categoryId = categoryIdTextField.getText().trim();
+        String categoryName = categoryNameTextField.getText().trim();
+        String categoryDescription = categoryDescriptionTextField.getText().trim();
 
-        List<Category> filteredCategories = categoryList.stream().filter(c -> c.getId().toString().contains(categoryId) && c.getName().contains(categoryName) && c.getDescription().contains(categoryDescription)).collect(Collectors.toList());
-        categoryTableView.getItems().clear();
-        ObservableList<Category> observableCategoryList = FXCollections.observableList(filteredCategories);
+        try {
+            // Open database connection
+            Database database = new Database();
+            database.openConnection();
 
-        categoryTableView.setItems(observableCategoryList);
+            // Retrieve all categories from the database
+            List<Category> categoryList = database.getAllCategories();
+
+            // Filter categories based on search criteria
+            List<Category> filteredCategories = categoryList.stream()
+                    .filter(c -> String.valueOf(c.getId()).contains(categoryId) &&
+                            c.getName().contains(categoryName) &&
+                            c.getDescription().contains(categoryDescription))
+                    .collect(Collectors.toList());
+
+            // Close database connection
+            database.closeConnection();
+
+            // Update the UI
+            categoryTableView.getItems().clear();
+            ObservableList<Category> observableCategoryList = FXCollections.observableList(filteredCategories);
+            categoryTableView.setItems(observableCategoryList);
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately in a real application
+        }
+        return categoryList;
     }
 
+
     public void addCategory() {
-        Long categoryId = (long) (categoryList.size() + 1);
         String categoryName = categoryNameTextField.getText().trim();
         String categoryDescription = categoryDescriptionTextField.getText().trim();
 
         if (categoryName.isEmpty() || categoryDescription.isEmpty()) {
-            System.out.println("nes fali");
+            System.out.println("Some fields are missing.");
             return;
         }
 
-        Category newCategory = new Category((categoryId), categoryName, categoryDescription);
-        categoryList.add(newCategory);
+        try {
+            // Open database connection
+            Database database = new Database();
+            database.openConnection();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("E:\\Projects\\javaLabos\\dat\\categories.txt", true))) {
+            // Save new category to the database
+            Category newCategory = new Category((long) (categoryList.size()+1),categoryName, categoryDescription);
+            database.saveNewCategory(newCategory);
 
-            writer.write(newCategory.getId() + "\n");
-            writer.write(newCategory.getName() + "\n");
-            writer.write(newCategory.getDescription() + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Close database connection
+            database.closeConnection();
+
+            // Optionally, you can update the UI or perform additional actions here
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately in a real application
         }
     }
+
 }

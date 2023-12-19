@@ -47,6 +47,15 @@ public class Item extends NamedEntity implements Serializable {
         this.sellingPrice = sellingPrice;
         this.discount = discount;
     }
+    public Item(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice) {
+        super(id, name);
+        this.category = category;
+        this.width = width;
+        this.height = height;
+        this.length = length;
+        this.productionCost = productionCost;
+        this.sellingPrice = sellingPrice;
+    }
 
     public static ArrayList<Item> loadItemsFromFile(String fileName) {
 
@@ -266,5 +275,9 @@ public class Item extends NamedEntity implements Serializable {
                 ", sellingPrice=" + getSellingPrice() +
                 ", discount=" + getDiscount() +
                 '}';
+    }
+
+    public long getCategoryId() {
+        return category.getId();
     }
 }

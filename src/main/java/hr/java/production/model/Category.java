@@ -58,6 +58,14 @@ public class Category extends NamedEntity implements Serializable {
         }
         return null;
     }
+    public static Category findCategoryById(Long id) {
+        for (Category category : categories) {
+            if (category.getId().equals(id)) {
+                return category;
+            }
+        }
+        return null;
+    }
 
     public String getName() {
         return super.getName();

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import hr.java.production.Enum.City;
+import hr.java.production.database.Database;
 import hr.java.production.model.Address;
 import hr.java.production.model.Factory;
 import hr.java.production.model.Item;
@@ -17,11 +18,13 @@ import javafx.util.Callback;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hr.java.production.model.Address.Builder.findAddressById;
 import static hr.java.production.model.Address.Builder.loadAddressesFromFile;
 import static hr.java.production.model.Factory.loadFactoriesFromFile;
 import static hr.java.production.model.Item.loadItemsFromFile;
@@ -73,56 +76,80 @@ public class FactoryScreenController {
                 return new ReadOnlyStringWrapper(param.getValue().getAddress().toString());
             }
         });
+        //TODO items lista je null
         factoryItemsTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Factory, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Factory, String> param) {
-                return new ReadOnlyStringWrapper(Arrays.toString(param.getValue().getItems()));
+                return new ReadOnlyStringWrapper(param.getValue().getItems().toString());
             }
         });
     }
 
     public void factorySearch() {
-        factoryList.clear();
-        factoryList = loadFactoriesFromFile("dat/factories.txt");
-        String factoryId = factoryIdTextField.getText();
-        String factoryName = factoryNameTextField.getText();
-        String factoryAddress = factoryAddressTextField.getText();
-        String factoryItems = factoryItemsTextField.getText();
+        String factoryId = factoryIdTextField.getText().trim();
+        String factoryName = factoryNameTextField.getText().trim();
 
-        List<Factory> filteredFactories = factoryList.stream().filter(c -> c.getId().toString().contains(factoryId) && c.getName().contains(factoryName)).collect(Collectors.toList());
-        factoryTableView.getItems().clear();
-        ObservableList<Factory> observableFactoryList = FXCollections.observableList(filteredFactories);
+        try {
+            // Open database connection
+            Database database = new Database();
+            database.openConnection();
 
-        factoryTableView.setItems(observableFactoryList);
+            // Retrieve all factories from the database
+            List<Factory> factoryList = database.getAllFactories();
+
+            // Filter factories based on search criteria
+            List<Factory> filteredFactories = factoryList.stream()
+                    .filter(f -> String.valueOf(f.getId()).contains(factoryId) &&
+                            f.getName().contains(factoryName))
+                    .collect(Collectors.toList());
+
+            // Close database connection
+            database.closeConnection();
+
+            // Update the UI
+            factoryTableView.getItems().clear();
+            ObservableList<Factory> observableFactoryList = FXCollections.observableList(filteredFactories);
+            factoryTableView.setItems(observableFactoryList);
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately in a real application
+        }
     }
 
     public void addFactories() {
         String factoryId = factoryIdTextField.getText().trim();
         String factoryName = factoryNameTextField.getText().trim();
-        String tempfactoryAddress = factoryAddressTextField.getText().trim();
+        String factoryAddress = factoryAddressTextField.getText().trim();
         String factoryItems = factoryItemsTextField.getText();
-        Address factoryAddress = new Address(tempfactoryAddress,
-                "1000",
-                City.ZAGREB,
-                10L);
+        //TODO fix adress logic usinng id instead of hardcoding
 
-        if (factoryId.isEmpty() || factoryName.isEmpty() || tempfactoryAddress.isEmpty()) {
-            System.out.println("fali unos");
+
+        if (factoryId.isEmpty() || factoryName.isEmpty() || factoryAddress.isEmpty()) {
+            System.out.println("Missing input");
             return;
         }
-        Item[] items = loadItemsFromFile("dat/items.txt").toArray(new Item[0]);
 
-        Factory newFactory = new Factory(Long.parseLong(factoryId), factoryName, factoryAddress, items);
+        try {
+            // Open database connection
+            Database database = new Database();
+            database.openConnection();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dat/factories.txt", true))) {
-            writer.write("\n" + newFactory.getId() + "\n");
-            writer.write(newFactory.getName() + "\n");
-            writer.write(4 + "\n");
-            writer.write(factoryItems);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Retrieve items from the database (assuming they are already stored in the database)
+            List<Item> items = database.getAllItems();
+
+            // Save new factory to the database
+            Factory newFactory = new Factory((long) (factoryList.size()+1), factoryName, findAddressById(Long.valueOf(factoryAddress)), items.toArray(new Item[0]));
+            database.saveNewFactory(newFactory);
+
+            // Close database connection
+            database.closeConnection();
+
+            // Optionally, you can update the UI or perform additional actions here
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately in a real application
         }
 
-
+        // Clear text fields and refresh the search
         factoryIdTextField.clear();
         factoryNameTextField.clear();
         factoryAddressTextField.clear();
@@ -130,4 +157,5 @@ public class FactoryScreenController {
 
         factorySearch();
     }
+
 }

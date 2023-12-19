@@ -1,9 +1,12 @@
 package hr.java.production.model;
 
+import hr.java.production.database.Database;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static hr.java.production.model.Item.findItemById;
@@ -21,6 +24,11 @@ public class Store extends NamedEntity implements Serializable {
         super(id, name);
         this.webAddress = webAddress;
         this.items = items;
+    }
+
+    public Store(Long id, String name, String webAddress) {
+        super(id, name);
+        this.webAddress = webAddress;
     }
 
     public static ArrayList<Store> loadStoresFromFile(String fileName) {
@@ -85,7 +93,16 @@ public class Store extends NamedEntity implements Serializable {
      * @return the item [ ]
      */
     public ArrayList<Item> getItems() {
-        return items;
+        try {
+            Database database = new Database();
+            database.openConnection();
+            ArrayList<Item> databaseItems = (ArrayList<Item>) database.getItemsForStore(this.getId());
+            return databaseItems;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -100,6 +117,8 @@ public class Store extends NamedEntity implements Serializable {
     public int getNumberOfItems() {
         return items.size();
     }
+
+
 
 
 }

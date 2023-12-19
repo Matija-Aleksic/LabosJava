@@ -70,6 +70,10 @@ public class Address implements Serializable {
         return id;
     }
 
+    public int getPostalCode() {
+        return Integer.parseInt(city.getPostalCode());
+    }
+
     /**
      * The type Builder.
      */

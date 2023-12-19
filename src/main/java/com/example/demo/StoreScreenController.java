@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+import hr.java.production.database.Database;
 import hr.java.production.model.Item;
 import hr.java.production.model.Store;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -16,6 +17,7 @@ import javafx.util.Callback;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,33 +75,39 @@ public class StoreScreenController {
                 return new ReadOnlyStringWrapper(param.getValue().getItems().toString());
             }
         });
+
     }
 
-    /**
-     * Store search.
-     */
-    public void storeSearch() {
-        ArrayList<Item> items = loadItemsFromFile("dat/items.txt");
-        List<Store> storeList = loadStoresFromFile("dat/stores.txt");
+    public void storeSearch() throws IOException {
+        List<Store> storeList;
+        try {
+            Database database = new Database();
+            database.openConnection();
+            storeList = database.getAllStores();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IOException();
+        }
 
         String storeId = storeIdTextField.getText();
         String storeName = storeNameTextField.getText();
-        String storeAddress = storeWebAddressTextField.getText();
-        String storeItems = storeItemsTextField.getText();
 
+        List<Store> filteredStores = storeList.stream()
+                .filter(c -> c.getId().toString().contains(storeId) && c.getName().contains(storeName))
+                .collect(Collectors.toList());
 
-        List<Store> filteredStores = storeList.stream().filter(c -> c.getId().toString().contains(storeId) && c.getName().contains(storeName)).collect(Collectors.toList());
         storeTableView.getItems().clear();
-        ObservableList<Store> observableFactoryList = FXCollections.observableList(filteredStores);
+        ObservableList<Store> observableStoreList = FXCollections.observableList(filteredStores);
 
-        storeTableView.setItems(observableFactoryList);
+        storeTableView.setItems(observableStoreList);
+
     }
 
 
-    /**
-     * Add store to file.
-     */
-    public void addStoreToFile() {
+
+//todo promijenit ime ovdje i u scene builderu
+    public void addStoreToFile() throws IOException {
         String storeId = storeIdTextField.getText().trim();
         String storeName = storeNameTextField.getText().trim();
         String storeWebAddress = storeWebAddressTextField.getText().trim();

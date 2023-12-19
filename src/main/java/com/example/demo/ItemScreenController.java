@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import hr.java.production.database.Database;
 import hr.java.production.model.Category;
 import hr.java.production.model.Discount;
 import hr.java.production.model.Item;
@@ -18,10 +19,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hr.java.production.model.Category.findCategoryByName;
 import static hr.java.production.model.Category.loadCategoriesFromFile;
 import static hr.java.production.model.Item.loadItemsFromFile;
 
@@ -56,10 +60,11 @@ public class ItemScreenController {
     private TableColumn<Item, String> itemDimensionsTableColumn;
     @FXML
     private TableColumn<Item, String> itemSellingPriceTableColumn;
-    @FXML
-    private TableColumn<Item, String> itemDiscountTableColumn;
 
-    public void initialize() {
+    Database database = new Database();
+
+    public void initialize() throws SQLException, IOException {
+        database.openConnection();
         ArrayList<Category> categoryList = loadCategoriesFromFile("dat/categories.txt");
         ArrayList<Item> items = loadItemsFromFile("dat/items.txt");
         List<String> categoryNames = new ArrayList<>();
@@ -96,61 +101,62 @@ public class ItemScreenController {
                 return new ReadOnlyStringWrapper(param.getValue().getSellingPrice().toString());
             }
         });
-        itemDiscountTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Item, String> param) {
-                return new ReadOnlyStringWrapper(param.getValue().getDiscount().getDiscountAmountString());
-            }
-        });
+
 
     }
 
-    public void itemSearch() {
-        List<Item> itemList = loadItemsFromFile("dat/items.txt");
-
+    public void itemSearch() throws SQLException {
         String itemId = itemIdTextField.getText();
         String itemName = itemNameTextField.getText();
-        String itemCategory = (String) itemCategoryComboBox.getValue();
-        String itemDimension = itemDimensionsTextField.getText();
-        String itemSellingPrice = itemSellingPriceTextField.getText();
-        String itemDiscount = itemDiscountTextField.getText();
-        List<Item> filteredItems = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
+        if (itemId.isEmpty() && itemName.isEmpty()){
+             items = database.getAllItems();
+        }else {
+            items.add(database.getItemById(Long.parseLong(itemId)));
+        }
 
 
-        filteredItems = itemList.stream().filter(c -> c.getId().toString().contains(itemId) && c.getName().contains(itemName)).collect(Collectors.toList());
         itemTableView.getItems().clear();
-
-        ObservableList<Item> observableCategoryList = FXCollections.observableList(filteredItems);
-
-        itemTableView.setItems(observableCategoryList);
+        ObservableList<Item> observableItemList = FXCollections.observableList(items);
+        itemTableView.setItems(observableItemList);
     }
 
-    public void addItemToFile() {
+    public void addItemToDatabase() throws SQLException {
         String itemId = itemIdTextField.getText().trim();
         String itemName = itemNameTextField.getText().trim();
-        String itemCategory = (String) itemCategoryComboBox.getValue();
+        String itemCategoryName = (String) itemCategoryComboBox.getValue();
         String itemDimension = itemDimensionsTextField.getText().trim();
         String itemSellingPrice = itemSellingPriceTextField.getText().trim();
         String itemDiscount = itemDiscountTextField.getText().trim();
 
-        if (itemId.isEmpty() || itemName.isEmpty() || itemCategory == null || itemDimension.isEmpty() || itemSellingPrice.isEmpty() || itemDiscount.isEmpty()) {
+        if (itemId.isEmpty() || itemName.isEmpty() || itemCategoryName == null || itemDimension.isEmpty() || itemSellingPrice.isEmpty() || itemDiscount.isEmpty()) {
             System.out.println("Please fill in all fields.");
             return;
         }
 
-        Item newItem = new Item(Long.parseLong(itemId), itemName, Category.findCategoryByName(itemCategory), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(3), BigDecimal.valueOf(Long.parseLong(itemSellingPrice)), new Discount(Long.valueOf(itemDiscount)));
+        // Retrieve the category from the database by name
+        Category category = findCategoryByName(itemCategoryName);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dat/items.txt", true))) {
-            writer.write(newItem.getId() + "\n");
-            writer.write(newItem.getName() + "\n");
-            writer.write(newItem.getCategory().getName() + "\n");
-            writer.write(newItem.getVolume() + "\n");
-            writer.write(newItem.getSellingPrice() + "\n");
-            writer.write(newItem.getDiscount().getDiscountAmountString() + "\n");
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (category == null) {
+            System.out.println("Category not found.");
+            return;
         }
 
+        // Create a new Item object
+        Item newItem = new Item(
+                Long.parseLong(itemId),
+                itemName,
+                category,
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(Long.parseLong(itemSellingPrice)),
+                new Discount(Long.valueOf(itemDiscount))
+        );
+
+        // Save the new item to the database
+        database.saveNewItem(newItem);
 
         itemIdTextField.clear();
         itemNameTextField.clear();
@@ -159,6 +165,7 @@ public class ItemScreenController {
         itemSellingPriceTextField.clear();
         itemDiscountTextField.clear();
 
-        itemSearch();
+        itemSearch(); // Optional: Update the UI or perform additional actions after adding the item
     }
+
 }
